@@ -1,2 +1,2 @@
-# doctor-patient-portal
+# Doctor Patient Portal
 Electronic Health Record System
