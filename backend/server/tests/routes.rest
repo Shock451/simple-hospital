@@ -1,0 +1,14 @@
+###
+GET http://localhost:5000/
+
+###
+POST http://localhost:3000/users/register
+Content-Type: application/application/json
+
+{
+    "email":"ayobami.oladosu@gmai.com",
+    "password":"oladosua",
+    "mobile":"09061279158",
+    "role":"doctor",
+    "name":"Oladosu Abdullahi"
+}
