@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { fetchUserDetails, fetchUniquePatientByToken } from './api';
+import { fetchUserDetails, fetchUniquePatientByToken } from '../helpers/api';
 import { Redirect } from 'react-router-dom';
-import Header from './include/Header';
-import Loader from './include/Loader';
-import Sidebar from './include/Sidebar';
+import Header from '../components/Header';
+import Loader from '../components/Loader';
+import Sidebar from '../components/Sidebar';
 import { Bar } from 'react-chartjs-2';
 
 function Home(props) {

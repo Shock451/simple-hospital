@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import * as myConstClass from './constants';
-import { fetchUserDetails } from './api';
-import Header from './include/Header';
-import Loader from './include/Loader';
-import Sidebar from './include/Sidebar';
+import * as myConstClass from '../helpers/constants';
+import { fetchUserDetails } from '../helpers/api';
+import Header from '../components/Header';
+import Loader from '../components/Loader';
+import Sidebar from '../components/Sidebar';
 
 function Profile(props) {
     const [isLoading, setIsLoading] = useState(true);

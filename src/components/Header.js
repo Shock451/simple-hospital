@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, Redirect } from 'react-router-dom';
-import { fetchUserDetails } from '../api';
-import * as myConstClass from '../constants';
+import { fetchUserDetails } from '../helpers/api';
+// import * as myConstClass from '../constants';
 
 function Header(props) {
     const [isLoading, setIsLoading] = useState([false]);
@@ -64,13 +64,13 @@ function Header(props) {
 
             <ul className="nav user-menu">
                 <li className="nav-item dropdown has-arrow main-drop">
-                    <a href="#" className="dropdown-toggle nav-link" data-toggle="dropdown">
+                    <button href="#" className="dropdown-toggle nav-link" data-toggle="dropdown">
                         <span className="user-img">
                             <img src="assets/img/profiles/avatar-21.jpg" alt="" />
                             <span className="status online"></span>
                         </span>
                         <span></span>
-                    </a>
+                    </button>
                     <div className="dropdown-menu">
                         <Link className="dropdown-item" to={'/profile'} >My Profile</Link>
                         <Link className="dropdown-item" to={'/'} onClick={signOut}>Logout</Link>

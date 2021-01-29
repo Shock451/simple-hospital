@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from 'react-router-dom';
-import { fetchPatientMessageData } from './api';
-import Header from './include/Header';
-import Loader from './include/Loader';
-import Sidebar from './include/Sidebar';
-import * as myConstClass from './constants';
+// import { Link } from 'react-router-dom';
+import { fetchPatientMessageData } from '../helpers/api';
+import Header from '../components/Header';
+import Loader from '../components/Loader';
+import Sidebar from '../components/Sidebar';
+import * as myConstClass from '../helpers/constants';
 
 function PatientMessage(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ function PatientMessage(props) {
             fetchData();
         }, 1000);
 
-
+        // eslint-disable-next-line
     }, []);
 
 

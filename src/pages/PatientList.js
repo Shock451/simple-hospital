@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { fetchPatientList } from './api';
-import Header from './include/Header';
-import Loader from './include/Loader';
-import Sidebar from './include/Sidebar';
+import { fetchPatientList } from '../helpers/api';
+import Header from '../components/Header';
+import Loader from '../components/Loader';
+import Sidebar from '../components/Sidebar';
 
 function PatientList(props) {
     const [isLoading, setIsLoading] = useState(true);

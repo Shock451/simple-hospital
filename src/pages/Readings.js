@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { fetchPatientReadings } from './api';
-import Header from './include/Header';
-import Loader from './include/Loader';
-import Sidebar from './include/Sidebar';
-import * as myConstClass from './constants';
+import { fetchPatientReadings } from '../helpers/api';
+import Header from '../components/Header';
+import Loader from '../components/Loader';
+import Sidebar from '../components/Sidebar';
+import * as myConstClass from '../helpers/constants';
 
 function Readings(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -146,7 +146,7 @@ function Readings(props) {
                                                             <td>{data.temprature}</td>
                                                             <td className="text-right">
                                                                 <div className="dropdown dropdown-action">
-                                                                    <a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                                                                    <button className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></button>
                                                                     <div className="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
                                                                         <Link className="dropdown-item border-0 btn-transition btn passData" to={'/readings_edit/' + data.id} title="Edit"><i className="fa fa-pencil"></i> Edit</Link>
                                                                         <Link className="dropdown-item border-0 btn-transition btn passData" title="Delete" onClick={() => { if (window.confirm('Are you sure you want to delete this?')) { deletePatient(data.id) }; }}><i className="fa fa-trash"></i> Delete</Link>

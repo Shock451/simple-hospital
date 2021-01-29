@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
-import Header from './include/Header';
-import Loader from './include/Loader';
-import Sidebar from './include/Sidebar';
-import * as myConstClass from './constants';
+import { fetchUniquePatientReadings } from '../helpers/api';
+import Header from '../components/Header';
+import Loader from '../components/Loader';
+import Sidebar from '../components/Sidebar';
+import * as myConstClass from '../helpers/constants';
 
 function Readings(props) {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isData, setData] = useState([]);
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const id = props.match.params.id;
+
+    useEffect(() => {
+        setIsLoading(true);
+        async function fetchData() {
+            const response = await fetchUniquePatientReadings(id);
+            setData(response);
+            setIsLoading(false);
+        }
+        fetchData();
+        // eslint-disable-next-line
+    }, []);
 
     const { register, handleSubmit, errors } = useForm();
 
@@ -22,6 +36,7 @@ function Readings(props) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                id: id,
                 blood_pressure: data.blood_pressure, 
                 blood_sugar: data.blood_sugar, 
                 temprature: data.temprature, 
@@ -34,7 +49,7 @@ function Readings(props) {
                     props.history.push({
                         pathname: "/readings",
                         state: {
-                            success: "Readings addedd successfully"
+                            success: "Readings updated successfully"
                         }
                     });
                 } else {
@@ -70,7 +85,7 @@ function Readings(props) {
                                 <h3 className="page-title">Readings</h3>
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to={'/readings'}>Readings</Link></li>
-                                    <li className="breadcrumb-item active">Add New Readings</li>
+                                    <li className="breadcrumb-item active">Edit Readings</li>
                                 </ul>
                             </div>
                             <div className="col-auto float-right ml-auto">
@@ -107,7 +122,7 @@ function Readings(props) {
                                                         value: /^[0-9]*$/i,
                                                         message: "Please enter valid number"
                                                     },
-                                                })} className="form-control" name="blood_sugar" type="text" placeholder="Blood Sugar" />
+                                                })} className="form-control" name="blood_sugar" type="text" placeholder="Blood Sugar" defaultValue={!isLoading ? isData.data.blood_sugar : ''} />
                                                 {errors.blood_sugar && <label className="error">{errors.blood_sugar.message}</label>}
                                             </div>
                                             <div class="col-md-4">
@@ -118,7 +133,7 @@ function Readings(props) {
                                                         value: /^[0-9]*$/i,
                                                         message: "Please enter valid number"
                                                     },
-                                                })} className="form-control" name="blood_pressure" type="text" placeholder="Blood Pressure" />
+                                                })} className="form-control" name="blood_pressure" type="text" placeholder="Blood Pressure" defaultValue={!isLoading ? isData.data.blood_pressure : ''} />
                                                 {errors.blood_pressure && <label className="error">{errors.blood_pressure.message}</label>}
                                             </div>
                                             <div class="col-md-4">
@@ -129,7 +144,7 @@ function Readings(props) {
                                                         value: /^[0-9]*$/i,
                                                         message: "Please enter valid number"
                                                     },
-                                                })} className="form-control" name="heart_rate" type="text" placeholder="Heart Rate" />
+                                                })} className="form-control" name="heart_rate" type="text" placeholder="Heart Rate" defaultValue={!isLoading ? isData.data.heart_rate : ''}/>
                                                 {errors.heart_rate && <label className="error">{errors.heart_rate.message}</label>}
                                             </div>
                                         </div>
@@ -142,12 +157,12 @@ function Readings(props) {
                                                         value: /^[0-9]*$/i,
                                                         message: "Please enter valid number"
                                                     },
-                                                })} className="form-control" name="temprature" type="text" placeholder="Temprature" />
+                                                })} className="form-control" name="temprature" type="text" placeholder="Temprature" defaultValue={!isLoading ? isData.data.temprature : ''}/>
                                                 {errors.temprature && <label className="error">{errors.temprature.message}</label>}
                                             </div>
                                         </div>
                                         <div class="form-actions text-right">
-                                            <button type="submit" class="btn btn-danger">Submit</button>
+                                            <button type="submit" class="btn btn-danger">Update</button>
                                         </div>
                                     </div>
                                 </form>

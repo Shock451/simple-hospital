@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, Redirect } from 'react-router-dom';
-import { fetchDoctorMessageData } from './api';
-import Header from './include/Header';
-import Loader from './include/Loader';
-import Sidebar from './include/Sidebar';
-import * as myConstClass from './constants';
+// import { Link, Redirect } from 'react-router-dom';
+import { fetchDoctorMessageData } from '../helpers/api';
+import Header from '../components/Header';
+import Loader from '../components/Loader';
+import Sidebar from '../components/Sidebar';
+import * as myConstClass from '../helpers/constants';
 import { useForm } from "react-hook-form";
 
 function DoctorMessage(props) {
@@ -13,6 +13,7 @@ function DoctorMessage(props) {
     const [isMessage, setMessage] = useState("");
     const userToken = localStorage.getItem('tokens');
 
+    // eslint-disable-next-line
     const { register, handleSubmit, errors } = useForm();
 
     let id = props.match.params.id;
@@ -37,6 +38,7 @@ function DoctorMessage(props) {
             }
             fetchData();
         }, 1000);
+        // eslint-disable-next-line
     }, []);
 
     function sendMessage() {

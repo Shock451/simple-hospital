@@ -1,10 +1,10 @@
-import * as myConstClass from '../constants';
+import { BASE_URL } from './constants';
 
 export const fetchUserDetails = async () => {
-    const userToken = localStorage.getItem('tokens');
-    const res = await fetch(myConstClass.BASE_URL + '/getUserDetails.php', {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/users/me', {
         method: "POST",
-        body: JSON.stringify({ userToken: userToken }),
+        body: JSON.stringify({ token: token }),
         headers: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
@@ -15,42 +15,42 @@ export const fetchUserDetails = async () => {
 }
 
 export const fetchPatientList = async (keyword) => {
-    const userToken = localStorage.getItem('tokens');
-    const res = await fetch(myConstClass.BASE_URL + '/getPatientList.php', {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/getPatientList.php', {
         method: "POST",
         header: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ userToken: userToken, search: keyword }),
+        body: JSON.stringify({ token: token, search: keyword }),
     });
     const body = await res.json();
     return body;
 }
 
 export const fetchUniquePatient = async (id) => {
-    const userToken = localStorage.getItem('tokens');
-    const res = await fetch(myConstClass.BASE_URL + '/getUniquePatient.php', {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/getUniquePatient.php', {
         method: "POST",
         header: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ userToken: userToken, id: id }),
+        body: JSON.stringify({ token: token, id: id }),
     });
     const body = await res.json();
     return body;
 }
 
 export const fetchUniquePatientByToken = async () => {
-    const userToken = localStorage.getItem('tokens');
-    const res = await fetch(myConstClass.BASE_URL + '/getUniquePatientByToken.php', {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/getUniquePatientByToken.php', {
         method: "POST",
         header: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ userToken: userToken }),
+        body: JSON.stringify({ token: token }),
     });
     const body = await res.json();
     return body;
@@ -58,55 +58,55 @@ export const fetchUniquePatientByToken = async () => {
 
 
 export const fetchDoctorMessageData = async (id) => {
-    const userToken = localStorage.getItem('tokens');
-    const res = await fetch(myConstClass.BASE_URL + '/getDcotorMessageData.php', {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/getDcotorMessageData.php', {
         method: "POST",
         header: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ userToken: userToken, id: id }),
+        body: JSON.stringify({ token: token, id: id }),
     });
     const body = await res.json();
     return body;
 }
 
 export const fetchPatientMessageData = async (id) => {
-    const userToken = localStorage.getItem('tokens');
-    const res = await fetch(myConstClass.BASE_URL + '/getPatientMessageData.php', {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/getPatientMessageData.php', {
         method: "POST",
         header: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ userToken: userToken, id: id }),
+        body: JSON.stringify({ token: token, id: id }),
     });
     const body = await res.json();
     return body;
 }
 
 export const fetchPatientReadings = async () => {
-    const userToken = localStorage.getItem('tokens');
-    const res = await fetch(myConstClass.BASE_URL + '/fetchPatientReadings.php', {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/fetchPatientReadings.php', {
         method: "POST",
         header: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ userToken: userToken }),
+        body: JSON.stringify({ token: token }),
     });
     const body = await res.json();
     return body;
 }
 export const fetchUniquePatientReadings = async (id) => {
-    const userToken = localStorage.getItem('tokens');
-    const res = await fetch(myConstClass.BASE_URL + '/fetchUniquePatientReadings.php', {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/fetchUniquePatientReadings.php', {
         method: "POST",
         header: {
             "Content-Type": "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ userToken: userToken, id: id }),
+        body: JSON.stringify({ token: token, id: id }),
     });
     const body = await res.json();
     return body;

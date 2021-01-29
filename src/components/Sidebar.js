@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { fetchUserDetails } from '../api';
+import { fetchUserDetails } from '../helpers/api';
 
 function Sidebar(props) {
     const [isLoading, setIsLoading] = useState(true);

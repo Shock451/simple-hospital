@@ -1,25 +1,20 @@
 import React, { useState } from "react";
 import { Link, Redirect } from 'react-router-dom';
-import logo from './logo.svg';
-import { useAuth } from "./Auth";
+import logo from '../logo.svg';
 import { useForm } from "react-hook-form";
-import * as myConstClass from './constants';
+import * as myConstClass from '../helpers/constants';
 
-function Login(props) {
+function ForgotPassword(props) {
 
-    const [isLoggedIn, setLoggedIn] = useState(false);
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
-    const { setAuthTokens } = useAuth();
 
     const { register, handleSubmit, errors } = useForm();
 
-    const referer = props.location.state ? props.location.state.referer : '/';
-
-    function postLogin(data) {
+    function postSubmit(data) {
         setIsLoading(true);
-        fetch(myConstClass.BASE_URL + '/Login.php', {
+        fetch(myConstClass.BASE_URL+'/ForgotPassword.php', {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -27,14 +22,17 @@ function Login(props) {
             },
             body: JSON.stringify({
                 email: data.username,
-                password: data.password,
                 type: data.type,
             })
         }).then((Response) => Response.json())
             .then((result) => {
                 if (result.status) {
-                    setAuthTokens(result.user_token);
-                    setLoggedIn(true);
+                    props.history.push({
+                        pathname: "/login",
+                        state: {
+                            pass: result.new_password
+                        }
+                    });
                 } else {
                     setIsLoading(false);
                     setIsError(true);
@@ -43,13 +41,9 @@ function Login(props) {
             }).catch(e => {
                 setIsLoading(false);
                 setIsError(true);
-                setErrorMsg("Unable to login, username or password is wrong");
+                setErrorMsg("Something went wrong try again");
                 console.log(e);
             });
-    }
-
-    if (isLoggedIn) {
-        return <Redirect to={referer} />;
     }
 
     return (
@@ -60,7 +54,7 @@ function Login(props) {
             {
                 isLoading ?
                     <div className="gif-loader">
-                        <img src="https://www.voya.ie/Interface/Icons/LoadingBasketContents.gif" alt="Loading" />
+                        <img src="https://www.voya.ie/Interface/Icons/LoadingBasketContents.gif" alt="loader" />
                     </div>
                     : null
             }
@@ -72,8 +66,8 @@ function Login(props) {
                         </div>
                         <div className="account-box">
                             <div className="account-wrapper">
-                                <h3 className="account-title">Login</h3>
-
+                                <h3 className="account-title">Forgot Password?</h3>
+                                <p className="account-subtitle">Enter your email to get a new password</p>
                                 {
                                     isError
                                         ?
@@ -85,24 +79,7 @@ function Login(props) {
                                         :
                                         null
                                 }
-
-                                {
-                                    props.location.state
-                                        ?
-                                        props.location.state.pass
-                                            ?
-                                            <div className="alert alert-success alert-dismissible" role="alert">
-                                                <button type="button" className="close" data-dismiss="alert">
-                                                </button>
-                                            Your new password is {props.location.state.pass}
-                                            </div>
-                                            :
-                                            null
-                                        :
-                                        null
-                                }
-
-                                <form onSubmit={handleSubmit(postLogin)}>
+                                <form onSubmit={handleSubmit(postSubmit)}>
                                     <div className="form-group">
                                         <label>Email Address</label>
                                         <input ref={register({
@@ -116,29 +93,18 @@ function Login(props) {
                                     </div>
 
                                     <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <label>Password</label>
-                                            </div>
-                                            <div className="col-auto">
-                                                <Link className="text-muted" to={'/forgotpassword'}>Forgot password?</Link>
-                                            </div>
-                                        </div>
-                                        <input ref={register({ required: "This field is required" })} className="form-control" name="password" type="password" placeholder="password" />
-                                        {errors.password && <label className="error">{errors.password.message}</label>}
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Login as:</label>
+                                        <label>Type</label>
                                         <select ref={register} className="form-control" name="type">
                                             <option value="Doctor">Doctor</option>
                                             <option value="Patient">Patient</option>
                                         </select>
                                     </div>
+
                                     <div className="form-group text-center">
-                                        <button className="btn btn-primary account-btn" type="submit" >Sign In</button>
+                                        <button className="btn btn-primary account-btn" type="submit" >Reset </button>
                                     </div>
                                     <div className="account-footer">
-                                        <p>Don't have an account yet? <Link to={'/register'}>Register Now</Link></p>
+                                        <p>Remember your password?<Link to={'/login'}>Login</Link></p>
                                     </div>
                                 </form>
                             </div>
@@ -150,4 +116,4 @@ function Login(props) {
     )
 }
 
-export default Login;
+export default ForgotPassword;

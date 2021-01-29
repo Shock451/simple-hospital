@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { fetchUniquePatient } from './api';
+import { fetchUniquePatient } from '../helpers/api';
 import { Link } from 'react-router-dom';
-import Header from './include/Header';
-import Loader from './include/Loader';
-import Sidebar from './include/Sidebar';
+import Header from '../components/Header';
+import Loader from '../components/Loader';
+import Sidebar from '../components/Sidebar';
 import { Bar } from 'react-chartjs-2';
 
 function PatientDetails(props) {
@@ -21,6 +21,7 @@ function PatientDetails(props) {
             setIsLoading(false);
         }
         fetchData();
+        // eslint-disable-next-line
     }, []);
 
     return (
