@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Home';
@@ -18,30 +18,44 @@ import PatientMessage from "./pages/PatientMessage";
 
 import { fetchUserDetails } from './helpers/api';
 
-import { AuthContext } from "./Auth";
+import { AppContext } from "./Context";
+import Loader from './components/Loader';
 
 function App(props) {
     const [authToken, setAuthToken] = useState(localStorage.getItem("token") || "");
     // eslint-disable-next-line
-    const [isData, setData] = useState([]);
+    const [appState, setAppState] = useState(null);
+    const [isLoading, setLoading] = useState(false);
 
     const setToken = (data) => {
-        localStorage.setItem("token", JSON.stringify(data));
+        localStorage.setItem("token", data);
         setAuthToken(data);
     }
 
     useEffect(() => {
         async function fetchData() {
-            const response = await fetchUserDetails();
-            setData(response);
+            setLoading(true);
+            const { data } = await fetchUserDetails();
+            setAppState({ user: data });
+            setLoading(false);
         }
-        if (localStorage.getItem("token")) {
+        if (authToken) {
+            console.log("We are in App and fetching");
             fetchData();
-        } 
-    }, []);
+        }
+    }, [authToken]);
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
-        <AuthContext.Provider value={{ authToken, setAuthToken: setToken }}>
+        <AppContext.Provider value={{
+            authToken,
+            setAuthToken: setToken,
+            appState,
+            setAppState
+        }}>
             <Router>
                 <PrivateRoute exact path="/" component={Home} />
                 <PrivateRoute path="/profile" component={Profile} />
@@ -58,7 +72,7 @@ function App(props) {
                 <Route path="/register" component={Register} />
                 <Route path="/forgotpassword" component={ForgotPassword} />
             </Router>
-        </AuthContext.Provider>);
+        </AppContext.Provider>);
 }
 
 export default App;

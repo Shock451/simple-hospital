@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { fetchDoctorMessageData } from '../helpers/api';
+import { fetchMessageData } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
@@ -12,8 +12,8 @@ function DoctorMessageList(props) {
     useEffect(() => {
         setIsLoading(true);
         async function fetchData() {
-            const response = await fetchDoctorMessageData();
-            setData(response);
+            const { data } = await fetchMessageData();
+            setData(data);
             setIsLoading(false);
         }
         fetchData();
@@ -40,11 +40,11 @@ function DoctorMessageList(props) {
                                 {
                                     !isLoading
                                         ?
-                                        isData.patientList.length > 0
+                                        isData.contactList.length > 0
                                             ?
                                             <ul>
                                                 {
-                                                    isData.patientList.map(function (data) {
+                                                    isData.contactList.map(function (data) {
                                                         return (
                                                             <li key={data.id}>
                                                                 <Link to={'/doctor_message/' + data.id}>{data.name}</Link>

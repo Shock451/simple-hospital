@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { fetchPatientMessageData } from '../helpers/api';
+import { fetchMessageData } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
 
-function DoctorMessageList(props) {
+function PatientMessageList(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [isData, setData] = useState([]);
 
     useEffect(() => {
         setIsLoading(true);
         async function fetchData() {
-            const response = await fetchPatientMessageData();
-            setData(response);
+            const { data } = await fetchMessageData();
+            setData(data);
             setIsLoading(false);
         }
         fetchData();
@@ -40,11 +40,11 @@ function DoctorMessageList(props) {
                                 {
                                     !isLoading
                                         ?
-                                        isData.doctorList.length > 0
+                                        isData.contactList.length > 0
                                             ?
                                             <ul>
                                                 {
-                                                    isData.doctorList.map(function (data) {
+                                                    isData.contactList.map(function (data) {
                                                         return (
                                                             <li key={data.id}>
                                                                 <Link to={'/patient_message/' + data.id}>{data.name}</Link>
@@ -67,4 +67,4 @@ function DoctorMessageList(props) {
     )
 }
 
-export default DoctorMessageList;
+export default PatientMessageList;

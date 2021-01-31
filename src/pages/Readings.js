@@ -4,39 +4,43 @@ import { fetchPatientReadings } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
-import * as myConstClass from '../helpers/constants';
+import {BASE_URL} from '../helpers/constants';
+import { convertDate } from '../helpers/functions';
 
 function Readings(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const [isData, setData] = useState([]);
+    const [readings, setReadings] = useState([]);
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
 
-    useEffect(() => {
+    async function fetchData() {
         setIsLoading(true);
-        async function fetchData() {
-            const response = await fetchPatientReadings();
-            setData(response);
-            setIsLoading(false);
-        }
+        const { data } = await fetchPatientReadings();
+        setReadings(data);
+        setIsLoading(false);
+    }
+
+    useEffect(() => {
         fetchData();
     }, []);
 
     function deletePatient(id) {
         setIsLoading(true);
-        fetch(myConstClass.BASE_URL + '/deleteReadings.php', {
-            method: 'post',
+        const token = localStorage.getItem('token');
+        let status;
+        fetch(BASE_URL + '/patients/readings/' + id, {
+            method: 'DELETE',
             headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': "application/json",
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: id,
-                userToken: localStorage.getItem('tokens')
-            })
-        }).then((Response) => Response.json())
+            }
+        }).then((response) => {
+            status = response.status;
+            return response.json();
+        })
             .then((result) => {
-                if (result.status) {
+                if (status) {
                     setIsLoading(false);
                     props.history.push({
                         pathname: "/readings",
@@ -44,11 +48,6 @@ function Readings(props) {
                             success: "Readings deleted successfully"
                         }
                     });
-                    async function fetchData() {
-                        const response = await fetchPatientReadings();
-                        setData(response);
-                        setIsLoading(false);
-                    }
                     fetchData();
                 } else {
                     setIsLoading(false);
@@ -125,7 +124,7 @@ function Readings(props) {
                                         <th>Blood Sugar</th>
                                         <th>Blood Pressure</th>
                                         <th>Heart Rate</th>
-                                        <th>Temprature</th>
+                                        <th>Temperature</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -135,21 +134,40 @@ function Readings(props) {
                                         ?
                                         <tbody>
                                             {
-                                                isData.data.map(function (data) {
+                                                readings.map(function (data, index) {
                                                     return (
                                                         <tr key={data.id}>
-                                                            <td>{data.count}</td>
-                                                            <td>{data.updated}</td>
+                                                            <td>{index + 1}</td>
+                                                            <td>{convertDate(data.updated)}</td>
                                                             <td>{data.blood_sugar}</td>
                                                             <td>{data.blood_pressure}</td>
                                                             <td>{data.heart_rate}</td>
-                                                            <td>{data.temprature}</td>
+                                                            <td>{data.temperature}</td>
                                                             <td className="text-right">
                                                                 <div className="dropdown dropdown-action">
-                                                                    <button className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></button>
-                                                                    <div className="dropdown-menu dropdown-menu-right" x-placement="bottom-end">
-                                                                        <Link className="dropdown-item border-0 btn-transition btn passData" to={'/readings_edit/' + data.id} title="Edit"><i className="fa fa-pencil"></i> Edit</Link>
-                                                                        <Link className="dropdown-item border-0 btn-transition btn passData" title="Delete" onClick={() => { if (window.confirm('Are you sure you want to delete this?')) { deletePatient(data.id) }; }}><i className="fa fa-trash"></i> Delete</Link>
+                                                                    <button
+                                                                        className="action-icon dropdown-toggle"
+                                                                        data-toggle="dropdown"
+                                                                        aria-expanded="false">
+                                                                        <i className="material-icons">more_vert</i>
+                                                                    </button>
+                                                                    <div className="btn dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+                                                                        <Link
+                                                                            className="dropdown-item border-0 btn-transition btn passData"
+                                                                            to={'/readings_edit/' + data.id}
+                                                                            title="Edit">
+                                                                            <i className="fa fa-pencil"></i> Edit
+                                                                        </Link>
+                                                                        <button
+                                                                            className="btn dropdown-item border-0 btn-transition btn passData"
+                                                                            title="Delete"
+                                                                            onClick={() => {
+                                                                                if (window.confirm('Are you sure you want to delete this?')) {
+                                                                                    deletePatient(data.id)
+                                                                                };
+                                                                            }}>
+                                                                            <i className="fa fa-trash"></i> Delete
+                                                                        </button>
                                                                     </div>
                                                                 </div>
                                                             </td>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Redirect } from 'react-router-dom';
 import logo from '../logo.svg';
-import { useAuth } from "../Auth";
+import { useAppContext } from "../Context";
 import { useForm } from "react-hook-form";
 import { BASE_URL } from '../helpers/constants';
 
@@ -11,15 +11,15 @@ function Login(props) {
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
-    const { setAuthTokens } = useAuth();
+    const { setAuthToken } = useAppContext();
 
     const { register, handleSubmit, errors } = useForm();
 
     const referer = props.location.state ? props.location.state.referer : '/';
 
-    function postLogin(data) {
+    async function postLogin(data) {
         setIsLoading(true);
-        fetch(BASE_URL + '/users/login', {
+        const res = await fetch(BASE_URL + '/users/login', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -28,25 +28,25 @@ function Login(props) {
             body: JSON.stringify({
                 email: data.username,
                 password: data.password,
-                role: data.role,
+                // role: data.role,
             })
-        })
-            .then(res => res.json())
-            .then(result => {
-                if (result.status) {
-                    setAuthTokens(result.token);
-                    setLoggedIn(true);
-                } else {
-                    setIsLoading(false);
-                    setIsError(true);
-                    setErrorMsg(result.message);
-                }
-            }).catch(e => {
+        }).catch(e => {
+            setIsLoading(false);
+            setIsError(true);
+            setErrorMsg("Unable to login, username or password is wrong");
+            console.log(e);
+        });
+        if (res && res.status) {
+            const data = await res.json();
+            if (res.status === 200) {
+                setAuthToken(data.token);
+                setLoggedIn(true);
+            } else {
                 setIsLoading(false);
                 setIsError(true);
-                setErrorMsg("Unable to login, username or password is wrong");
-                console.log(e);
-            });
+                setErrorMsg(data.err);
+            }
+        }
     }
 
     if (isLoggedIn) {
@@ -125,13 +125,13 @@ function Login(props) {
                                         <input ref={register({ required: "This field is required" })} className="form-control" name="password" type="password" placeholder="password" />
                                         {errors.password && <label className="error">{errors.password.message}</label>}
                                     </div>
-                                    <div className="form-group">
+                                    {/* <div className="form-group">
                                         <label>Login as:</label>
                                         <select ref={register} className="form-control" name="role">
-                                            <option value="Doctor">Doctor</option>
-                                            <option value="Patient">Patient</option>
+                                            <option value="doctor">Doctor</option>
+                                            <option value="patient">Patient</option>
                                         </select>
-                                    </div>
+                                    </div> */}
                                     <div className="form-group text-center">
                                         <button className="btn btn-primary account-btn" type="submit" >Sign In</button>
                                     </div>

@@ -5,7 +5,7 @@ import { fetchUniquePatientReadings } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
-import * as myConstClass from '../helpers/constants';
+import {putPatientReadings} from '../helpers/api';
 
 function Readings(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -17,8 +17,8 @@ function Readings(props) {
     useEffect(() => {
         setIsLoading(true);
         async function fetchData() {
-            const response = await fetchUniquePatientReadings(id);
-            setData(response);
+            const { data } = await fetchUniquePatientReadings(id);
+            setData(data);
             setIsLoading(false);
         }
         fetchData();
@@ -27,44 +27,25 @@ function Readings(props) {
 
     const { register, handleSubmit, errors } = useForm();
 
-    function postSubmit(data) {
+    async function postSubmit(reading) {
         setIsLoading(true);
-        fetch(myConstClass.BASE_URL + '/addReadings.php', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: id,
-                blood_pressure: data.blood_pressure, 
-                blood_sugar: data.blood_sugar, 
-                temprature: data.temprature, 
-                heart_rate: data.heart_rate, 
-                userToken: localStorage.getItem('tokens')
-            })
-        }).then((Response) => Response.json())
-            .then((result) => {
-                if (result.status) {
-                    props.history.push({
-                        pathname: "/readings",
-                        state: {
-                            success: "Readings updated successfully"
-                        }
-                    });
-                } else {
-                    setIsLoading(false);
-                    setIsError(true);
-                    setErrorMsg(result.message);
+        const { status, data } = await putPatientReadings(reading, id);
+
+        if (status) {
+            props.history.push({
+                pathname: "/readings",
+                state: {
+                    success: "Readings updated successfully"
                 }
-            }).catch(e => {
-                setIsLoading(false);
-                setIsError(true);
-                setErrorMsg("Not able to connect with API try again after sometime.");
-                console.log(e);
             });
+        } else {
+            setIsLoading(false);
+            setIsError(true);
+            setErrorMsg(data.err);
+        }
     }
 
+    console.log(isData);
     return (
         <div className="main-wrapper">
             {
@@ -89,14 +70,14 @@ function Readings(props) {
                                 </ul>
                             </div>
                             <div className="col-auto float-right ml-auto">
-                                <Link to={'/readings'} className="btn add-btn"><i class="fa fa-arrow-left"></i> Back to Readings</Link>
+                                <Link to={'/readings'} className="btn add-btn"><i className="fa fa-arrow-left"></i> Back to Readings</Link>
                             </div>
                         </div>
                     </div>
 
                     <div className="row">
-                        <div class="col-lg-12">
-                            <div class="card">
+                        <div className="col-lg-12">
+                            <div className="card">
                                 <form onSubmit={handleSubmit(postSubmit)}>
                                     {
                                         isError
@@ -109,12 +90,12 @@ function Readings(props) {
                                             :
                                             null
                                     }
-                                    <div class="card-header">
-                                        <h4 class="card-title mb-0">Readings Info</h4>
+                                    <div className="card-header">
+                                        <h4 className="card-title mb-0">Readings Info</h4>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="form-group row">
-                                            <div class="col-md-4">
+                                    <div className="card-body">
+                                        <div className="form-group row">
+                                            <div className="col-md-4">
                                                 <label>Blood Sugar <em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
@@ -122,10 +103,10 @@ function Readings(props) {
                                                         value: /^[0-9]*$/i,
                                                         message: "Please enter valid number"
                                                     },
-                                                })} className="form-control" name="blood_sugar" type="text" placeholder="Blood Sugar" defaultValue={!isLoading ? isData.data.blood_sugar : ''} />
+                                                })} className="form-control" name="blood_sugar" type="text" placeholder="Blood Sugar" defaultValue={!isLoading ? isData.blood_sugar : ''} />
                                                 {errors.blood_sugar && <label className="error">{errors.blood_sugar.message}</label>}
                                             </div>
-                                            <div class="col-md-4">
+                                            <div className="col-md-4">
                                                 <label>Blood Pressure <em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
@@ -133,10 +114,10 @@ function Readings(props) {
                                                         value: /^[0-9]*$/i,
                                                         message: "Please enter valid number"
                                                     },
-                                                })} className="form-control" name="blood_pressure" type="text" placeholder="Blood Pressure" defaultValue={!isLoading ? isData.data.blood_pressure : ''} />
+                                                })} className="form-control" name="blood_pressure" type="text" placeholder="Blood Pressure" defaultValue={!isLoading ? isData.blood_pressure : ''} />
                                                 {errors.blood_pressure && <label className="error">{errors.blood_pressure.message}</label>}
                                             </div>
-                                            <div class="col-md-4">
+                                            <div className="col-md-4">
                                                 <label>Heart Rate <em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
@@ -144,25 +125,25 @@ function Readings(props) {
                                                         value: /^[0-9]*$/i,
                                                         message: "Please enter valid number"
                                                     },
-                                                })} className="form-control" name="heart_rate" type="text" placeholder="Heart Rate" defaultValue={!isLoading ? isData.data.heart_rate : ''}/>
+                                                })} className="form-control" name="heart_rate" type="text" placeholder="Heart Rate" defaultValue={!isLoading ? isData.heart_rate : ''} />
                                                 {errors.heart_rate && <label className="error">{errors.heart_rate.message}</label>}
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <div class="col-md-4">
-                                                <label>Temprature <em>*</em></label>
+                                        <div className="form-group row">
+                                            <div className="col-md-4">
+                                                <label>Temperature <em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
                                                         value: /^[0-9]*$/i,
                                                         message: "Please enter valid number"
                                                     },
-                                                })} className="form-control" name="temprature" type="text" placeholder="Temprature" defaultValue={!isLoading ? isData.data.temprature : ''}/>
-                                                {errors.temprature && <label className="error">{errors.temprature.message}</label>}
+                                                })} className="form-control" name="temperature" type="text" placeholder="Temperature" defaultValue={!isLoading ? isData.temperature : ''} />
+                                                {errors.temperature && <label className="error">{errors.temperature.message}</label>}
                                             </div>
                                         </div>
-                                        <div class="form-actions text-right">
-                                            <button type="submit" class="btn btn-danger">Update</button>
+                                        <div className="form-actions text-right">
+                                            <button type="submit" className="btn btn-danger">Update</button>
                                         </div>
                                     </div>
                                 </form>

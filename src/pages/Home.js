@@ -1,31 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { fetchUserDetails, fetchUniquePatientByToken } from '../helpers/api';
+import { fetchPatientReadings } from '../helpers/api';
 import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
 import { Bar } from 'react-chartjs-2';
+import { useAppContext } from '../Context';
+import { createChartData } from '../helpers/functions';
 
 function Home(props) {
-    const [isLoading, setIsLoading] = useState(true);
-    const [isData, setData] = useState([]);
-    const [isChartData, setChartData] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isChartData, setChartData] = useState([]);
+    const { appState } = useAppContext();
 
+    console.log("We are in home");
     useEffect(() => {
-        setIsLoading(true);
+        if (!appState) return;
+        
         async function fetchData() {
-            const response = await fetchUserDetails();
-            setData(response);
-
-            const response2 = await fetchUniquePatientByToken();
-            setChartData(response2.readingJson);
+            setIsLoading(true);
+            const { status, data } = await fetchPatientReadings();
+            if (status === 200) {
+                let newChartData = createChartData(data);
+                setChartData(newChartData);
+            }
             setIsLoading(false);
         }
-        fetchData();
-    }, []);
 
-    if (!isLoading) {
-        if (isData.data.type !== 'Patient') {
+        if (appState.user.role === 'patient') {
+            console.log("We shall fetch");
+            fetchData();
+        }
+    }, [appState]);
+
+    if (!isLoading && appState) {
+        if (appState.user.role === 'doctor') {
+            console.log("We shall redirect");
             return <Redirect to={'/patient_list'} />;
         }
     }
@@ -61,11 +71,8 @@ function Home(props) {
                             <div className="card">
                                 <div className="card-body">
                                     <h3 className="card-title">Patients Readings</h3>
-                                    {
-                                        !isLoading
-                                            ?
-                                            isChartData.length !== 0
-                                                ?
+                                    {!isLoading ?
+                                            isChartData.length !== 0 ?
                                                 <Bar data={isChartData} />
                                                 :
                                                 <h4>No Record Found...</h4>

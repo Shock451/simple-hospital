@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Redirect } from 'react-router-dom';
 import logo from '../logo.svg';
-import { useAuth } from "../Auth";
+import { useAppContext } from "../Context";
 import { useForm } from "react-hook-form";
 import * as myConstClass from '../helpers/constants';
 
@@ -10,7 +10,7 @@ function Register(props) {
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
-    const { setAuthTokens } = useAuth();
+    const { setAuthToken } = useAppContext();
 
     const { register, handleSubmit, errors } = useForm();
 
@@ -18,7 +18,8 @@ function Register(props) {
 
     function postRegister(data) {
         setIsLoading(true);
-        fetch(myConstClass.BASE_URL+'/Register.php', {
+        let status;
+        fetch(myConstClass.BASE_URL + '/users/register', {
             method: 'post',
             headers: {
                 'Accept': 'application/json',
@@ -31,15 +32,19 @@ function Register(props) {
                 password: data.password,
                 role: data.role,
             })
-        }).then((Response) => Response.json())
-            .then((result) => {
-                if (result.status) {
-                    setAuthTokens(result.user_token);
+        }).then((res) => {
+            status = res.status;
+            console.log(status);
+            return res.json()
+        })
+            .then((data) => {
+                if (status === 200) {
+                    setAuthToken(data.token);
                     setLoggedIn(true);
                 } else {
                     setIsLoading(false);
                     setIsError(true);
-                    setErrorMsg(result.message);
+                    setErrorMsg(data.err);
                 }
             }).catch(e => {
                 setIsLoading(false);
@@ -126,8 +131,8 @@ function Register(props) {
                                     <div className="form-group">
                                         <label>You are ?</label>
                                         <select ref={register} className="form-control" name="role">
-                                            <option value="Doctor">Doctor</option>
-                                            <option value="Patient">Patient</option>
+                                            <option value="doctor">Doctor</option>
+                                            <option value="patient">Patient</option>
                                         </select>
                                     </div>
                                     <div className="form-group text-center">
