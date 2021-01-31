@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import * as myConstClass from '../helpers/constants';
+import { BASE_URL } from '../helpers/constants';
 import { fetchUserDetails } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
@@ -26,36 +26,39 @@ function Profile(props) {
 
     const { register, handleSubmit, errors, watch } = useForm();
 
-    function updateProfile(data) {
-        data['userToken'] = localStorage.getItem('tokens');
+    async function updateProfile(changes) {
         setIsLoading(true);
-        fetch(myConstClass.BASE_URL+'/ProfileUpdate.php', {
-            method: 'post',
+        const token = localStorage.getItem('token');
+        const res = await fetch(BASE_URL + '/users/me', {
+            method: 'put',
             headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': "application/json",
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
-        }).then((Response) => Response.json())
-            .then((result) => {
-                if (result.status) {
-                    setIsSuccess(true);
-                    setIsLoading(false);
-                    setIsError(false);
-                    setErrorMsg('');
-                    setSuccessMsg(result.message);
-                } else {
-                    setIsLoading(false);
-                    setIsError(true);
-                    setErrorMsg(result.message);
-                    setSuccessMsg('');
-                }
-            }).catch(e => {
+            body: JSON.stringify(changes)
+        }).catch(e => {
+            setIsLoading(false);
+            setIsError(true);
+            setErrorMsg("Unable to update. Try again after some time.");
+            console.log(e);
+        });
+
+        if (res && res.status) {
+            const data = await res.json();
+            if (res.status === 200) {
+                setIsSuccess(true);
+                setIsLoading(false);
+                setIsError(false);
+                setErrorMsg('');
+                setSuccessMsg(data.msg);
+            } else {
                 setIsLoading(false);
                 setIsError(true);
-                setErrorMsg("Unable to update. Try again after some time.");
-                console.log(e);
-            });
+                setErrorMsg(data.err);
+                setSuccessMsg('');
+            }
+        }
     }
 
     return (
@@ -139,8 +142,8 @@ function Profile(props) {
                                                                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                                                 message: "Please enter valid email address"
                                                             }
-                                                        })} className="form-control" name="username" type="username" placeholder="Email Address" defaultValue={!isLoading ? isData.data.email : ''} />
-                                                        {errors.username && <label className="error">{errors.username.message}</label>}
+                                                        })} className="form-control" name="email" type="email" placeholder="Email Address" defaultValue={!isLoading ? isData.data.email : ''} />
+                                                        {errors.email && <label className="error">{errors.email.message}</label>}
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">

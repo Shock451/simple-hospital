@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-// import { Link, Redirect } from 'react-router-dom';
-import { fetchDoctorMessageData } from '../helpers/api';
+import { fetchMessageData } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
-import * as myConstClass from '../helpers/constants';
+import { BASE_URL } from '../helpers/constants';
 import { useForm } from "react-hook-form";
+import { formatDateTime } from '../helpers/functions';
 
 function DoctorMessage(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [isData, setData] = useState([]);
     const [isMessage, setMessage] = useState("");
-    const userToken = localStorage.getItem('tokens');
 
     // eslint-disable-next-line
     const { register, handleSubmit, errors } = useForm();
@@ -21,10 +20,10 @@ function DoctorMessage(props) {
 
     useEffect(() => {
         setIsLoading(true);
-        setInterval(() => {
+        const intervalId = setInterval(() => {
             async function fetchData() {
-                const response = await fetchDoctorMessageData(id);
-                setData(response);
+                const { data } = await fetchMessageData(id);
+                setData(data);
                 setIsLoading(false);
                 if (isLoading) {
                     function scrollToBottom() {
@@ -32,43 +31,47 @@ function DoctorMessage(props) {
                             messagesEndRef && messagesEndRef.current.scrollIntoView({ block: 'end', behavior: 'smooth' });
                         }
                     }
-
                     scrollToBottom();
                 }
             }
             fetchData();
-        }, 1000);
+        }, 3000);
         // eslint-disable-next-line
+        return () => clearInterval(intervalId);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    function sendMessage() {
+    async function sendMessage() {
         setIsLoading(true);
-        fetch(myConstClass.BASE_URL + '/sendMessage.php', {
-            method: 'post',
+        const token = localStorage.getItem('token');
+        const res = await fetch(BASE_URL + '/chats/', {
+            method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': "application/json",
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 message: isMessage,
                 to_id: id,
-                userToken: userToken
             })
-        }).then((Response) => Response.json())
-            .then((result) => {
-                if (result.status) {
-                    async function fetchData() {
-                        const response = await fetchDoctorMessageData(id);
-                        setData(response);
-                        setIsLoading(false);
-                    }
-                    fetchData();
-                } else {
+        }).catch(e => {
+            setIsLoading(false);
+        });
+
+        if (res && res.status) {
+            if (res.status === 200) {
+                async function fetchData() {
+                    const { data } = await fetchMessageData(id);
+                    setData(data);
                     setIsLoading(false);
                 }
-            }).catch(e => {
+                fetchData();
+            } else {
                 setIsLoading(false);
-            });
+            }
+        }
     }
 
     function messageUpdate(value) {
@@ -99,7 +102,7 @@ function DoctorMessage(props) {
                                             <div className="navbar">
                                                 <div className="user-details mr-auto">
                                                     <div className="user-info float-left">
-                                                        <span>{isData.patientDetails.name}</span>
+                                                        <span>{isData.recipientDetails.name}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -109,21 +112,20 @@ function DoctorMessage(props) {
                                                 <div className="chat-wrap-inner">
                                                     <div className="chat-box">
                                                         <div className="chats" id="scrollChat">
-                                                            {
-                                                                isData.patientChat.length > 0
+                                                            {// eslint-disable-next-line eqeqeq
+                                                                isData.messages.length > 0
                                                                     ?
-                                                                    isData.patientChat.map(function (data) {
+                                                                    isData.messages.map(function (data) {
                                                                         return (
                                                                             <div className="chat" key={data.id}>
-                                                                                {
-                                                                                    data.to_id === id && data.message !== ''
-                                                                                        ?
+                                                                                {// eslint-disable-next-line eqeqeq
+                                                                                    data.to_id == id && data.message !== ''?
                                                                                         <div className="chat chat-right">
                                                                                             <div className="chat-body">
                                                                                                 <div className="chat-bubble">
                                                                                                     <div className="chat-content">
                                                                                                         <p>{data.message}</p>
-                                                                                                        <span className="chat-time">{data.created}</span>
+                                                                                                        <span className="chat-time">{formatDateTime(data.created)}</span>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
@@ -134,7 +136,7 @@ function DoctorMessage(props) {
                                                                                                 <div className="chat-bubble">
                                                                                                     <div className="chat-content">
                                                                                                         <p>{data.message}</p>
-                                                                                                        <span className="chat-time">{data.created}</span>
+                                                                                                        <span className="chat-time">{formatDateTime(data.created)}</span>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
