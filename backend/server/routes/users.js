@@ -6,10 +6,12 @@ import AuthMiddleware from "../middlewares/auth";
 
 const router = Router();
 
-router.get('/me', AuthMiddleware.authorize,  UserController.getUserProfile);
+router.get('/me', AuthMiddleware.authorize, UserController.getUserProfile);
+
+router.put('/me', AuthMiddleware.authorize, UserController.updateUserProfile);
 
 router.post('/login', UserController.login);
 
-router.post('/register', UserController.registerUser);
+router.post('/register', UserController.registerUser, UserController.login);
 
 export default router;

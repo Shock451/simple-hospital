@@ -1,190 +1,55 @@
 import jwt from "jsonwebtoken";
 
 import {
-    getProviderById,
-    getManagerById,
-    updateProfileById,
-    getFlatRatesByProviderId,
-    createFlatRate,
-    checkFlatRate,
-    deleteFlatRateById,
-    updateFlatRateById,
+    fetchContactList,
+    fetchMessages,
+    sendMessage,
 } from "../models/chat.js";
+import { getUsersById } from "../models/user.js";
 
-import fieldLists from '../data/fieldLists';
-
-function formatUpdateQuery(obj, fieldList) {
-    let data = [], queryExtension = "";
-    Object.keys(obj).forEach(key => {
-        if (fieldList.includes(key)) {
-            queryExtension += `${key}=?,`;
-            data.push(obj[key]);
-        }
-    });
-    // remove the trailing comma from the query extension
-    queryExtension = queryExtension.slice(0, -1);
-    return [queryExtension, data];
-}
 
 export default {
 
-    getFlatRates: async (req, res) => {
+    getContactList: async (req, res) => {
+        const user_id = req._id;
+        const role = req._role;
 
-        let provider_id = req._id;
+        const contactList = await fetchContactList(user_id, role);
 
-        let flatRates = await getFlatRatesByProviderId(provider_id);
+        res.status(200).json({ contactList });
+    },
+
+    getMessages: async (req, res) => {
+        const user_id = req._id;
+        const recipient_id = req.params.recipient_id;
+
+        const messages = await fetchMessages(user_id, recipient_id);
+        const [recipientDetails] = await getUsersById(recipient_id);
 
         res.status(200).json({
-            flatRates,
+            messages,
+            recipientDetails: {
+                name: recipientDetails.name
+            }
         });
-        return;
+
     },
 
-    createFlatRate: async (req, res) => {
+    postMessage: async (req, res) => {
+        const from_id = req._id;
+        const { message, to_id } = req.body;
 
-        let provider_id = req._id;
+        const sent = await sendMessage({ from_id, to_id, message });
 
-        const { start, dest, small, partner_small, medium, partner_medium, large, partner_large } = req.body;
-
-        if (!start || !dest || (!small && !medium && !large)) {
-            res.status(400).json({
-                msg: 'Please provide the pickup location and destination and at least one price.'
+        if (!sent) {
+            res.status(500).json({
+                err: "An error occured",
             });
             return;
         }
 
-        let flatRateExists = await checkFlatRate(start, dest, provider_id);
-
-        if (flatRateExists) {
-            res.status(400).json({
-                msg: 'Flat rate already exists.'
-            });
-            return;
-        }
-
-        const createdFlatRateId = await createFlatRate({
-            start, dest, small, partner_small, medium, partner_medium, large, partner_large, provider_id
+        res.status(200).json({
+            msg: "Message sent successfully"
         });
-
-        if (createdFlatRateId !== null) {
-            res.status(200).json({
-                msg: 'Flat Rate successfully created.',
-                id: createdFlatRateId,
-            });
-        } else {
-            res.status(500).json({
-                msg: 'An error occured.'
-            });
-        }
-    },
-
-    deleteFlatRate: async (req, res) => {
-
-        let provider_id = req._id;
-        let { id } = req.params;
-
-        let deleted = await deleteFlatRateById(id, provider_id);
-
-        if (deleted) {
-            res.status(200).json({
-                msg: 'Flat Rate deleted successfully.'
-            });
-        } else {
-            res.status(500).json({
-                msg: 'An error occured.'
-            });
-        }
-    },
-
-    updateFlatRate: async (req, res) => {
-
-        let provider_id = req._id;
-
-        let {
-            small,
-            partner_small,
-            medium,
-            partner_medium,
-            large,
-            partner_large,
-            id
-        } = req.body;
-
-        let successfulUpdate = await updateFlatRateById([
-            small,
-            partner_small,
-            medium,
-            partner_medium,
-            large,
-            partner_large,
-            id
-        ], provider_id);
-
-        if (successfulUpdate) {
-            res.status(200).json({
-                msg: 'Flat Rate updated successfully.'
-            });
-        } else {
-            res.status(500).json({
-                msg: 'An error occured.'
-            });
-        }
-    },
-
-    getProfile: async (req, res) => {
-
-        let provider_id = req._id;
-
-        let [companyDetails] = await getProviderById(provider_id);
-        let [managerDetails] = await getManagerById(provider_id);
-
-        if (companyDetails && managerDetails) {
-            res.status(200).json({
-                companyDetails,
-                managerDetails
-            });
-        } else {
-            res.status(404).json({
-                msg: "Could not retrieve profile information."
-            });
-        }
-    },
-
-    updateProfile: async (req, res) => {
-
-        let provider_id = req._id;
-
-        let [query, data] = formatUpdateQuery(req.body, fieldLists.providers);
-
-        let successfulUpdate = await updateProfileById(query, data, provider_id, "providers");
-
-        if (successfulUpdate) {
-            res.status(200).json({
-                msg: 'Profile updated successfully.'
-            });
-        } else {
-            res.status(500).json({
-                msg: 'An error occured.'
-            });
-        }
-    },
-
-    updateManagerProfile: async (req, res) => {
-
-        let provider_id = req._id;
-
-        let [query, data] = formatUpdateQuery(req.body, fieldLists.managers);
-
-        let successfulUpdate = await updateProfileById(query, data, provider_id, "managers");
-
-        if (successfulUpdate) {
-            res.status(200).json({
-                msg: 'Manager Profile updated successfully.'
-            });
-        } else {
-            res.status(500).json({
-                msg: 'An error occured.'
-            });
-        }
-    },
+    }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 28, 2021 at 06:49 PM
+-- Generation Time: Jan 31, 2021 at 06:55 AM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.11
 
@@ -17,10 +17,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `doctor-patient-portal`
---
 
 -- --------------------------------------------------------
 
@@ -52,7 +48,6 @@ CREATE TABLE `doctors` (
   `updated` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
 --
 -- Table structure for table `patients`
 --
@@ -78,12 +73,10 @@ CREATE TABLE `patient_readings` (
   `blood_sugar` int(11) DEFAULT NULL,
   `blood_pressure` int(11) DEFAULT NULL,
   `heart_rate` int(11) DEFAULT NULL,
-  `temprature` int(11) DEFAULT NULL,
-  `created` datetime NOT NULL,
+  `temperature` int(11) DEFAULT NULL,
+  `created` datetime NOT NULL DEFAULT current_timestamp(),
   `updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `users`
@@ -105,16 +98,14 @@ CREATE TABLE `users` (
 -- Triggers `users`
 --
 DELIMITER $$
-CREATE TRIGGER `after_user_insert` 
-  AFTER INSERT 
-  ON `users` 
-  FOR EACH ROW BEGIN
+CREATE TRIGGER `after_user_insert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
     IF NEW.role='patient' THEN
-        INSERT INTO patients (user_id) VALUES (new.id);
+        INSERT INTO patients(user_id) VALUES(new.id);
     ELSEIF NEW.role='doctor' THEN
-        INSERT INTO doctors (user_id) VALUES (new.id);
+        INSERT INTO doctors(user_id) VALUES(new.id);
     END IF;
-END $$
+END
+$$
 DELIMITER ;
 
 --
