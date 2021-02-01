@@ -18,7 +18,7 @@ export default {
 
     only_patients: (req, res, next) => {
         let role = req._role;
-        if (role === ROLES[0]){ // ROLES[0] is patient
+        if (role !== ROLES[0]){ // ROLES[0] is patient
             res.status(400).json({ message: "Authorized patients only." });
         } else {
             next();
@@ -27,7 +27,7 @@ export default {
 
     only_doctors: (req, res, next) => {
         let role = req._role;
-        if (role === ROLES[1]) { // ROLES[0] is doctorr
+        if (role !== ROLES[1]) { // ROLES[0] is doctorr
             res.status(400).json({ message: "Authorized doctors only." });
         } else {
             next();

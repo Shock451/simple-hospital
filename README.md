@@ -70,24 +70,24 @@ $ npm start
 > - After the start of the project, you have to integrate the PHP API for storing the data in the database.
 > - For that follow the below step.
 
-#### <i class="icon-file"></i> 📝 Install XAMPP or WAMPP Server
+#### <i className="icon-file"></i> 📝 Install XAMPP or WAMPP Server
 - Download Xampp Server from [Here ↩](https://www.apachefriends.org/download.html).
-#### <i class="icon-file"></i> 📝 Create a Folder
+#### <i className="icon-file"></i> 📝 Create a Folder
 
-- Navigate into your  <i class="icon-folder-open"></i> xampp folder, in the drive where you have install the XAMPP Server. Then go to htdocs folder (If xampp installed) or www folder (If wampp installed).
-- Create new folder by clicking on <i class="icon-folder"></i> **New Folder** from the top panel or right-click on mouse and create new folder.
+- Navigate into your  <i className="icon-folder-open"></i> xampp folder, in the drive where you have install the XAMPP Server. Then go to htdocs folder (If xampp installed) or www folder (If wampp installed).
+- Create new folder by clicking on <i className="icon-folder"></i> **New Folder** from the top panel or right-click on mouse and create new folder.
 - Name that folder as Health-monitoring-system or anything you want.
 
-#### <i class="icon-folder-open"></i> ✎ Add PHP Script
+#### <i className="icon-folder-open"></i> ✎ Add PHP Script
 
 Now, go to the health-monitoring-api directory in this repo or in the downloaded repo, copy <kbd>Ctrl+c</kbd> or cut <kbd>Ctrl+x</kbd> all the files added in the folder and paste it into your respective folder.
 
-#### <i class="icon-plus"></i> ✎ Create a Database
+#### <i className="icon-plus"></i> ✎ Create a Database
 - Now, open the PHPMyAdmin from your localhost server: localhost/phpmyadmin.
 - Create a database and name it as health-monitoring or anything you want.
 - There is a SQL file in the API folder health-monitoring.sql, import this file in the created database.
 
-#### <i class="icon-pencil"></i> ✎ Changes in Files
+#### <i className="icon-pencil"></i> ✎ Changes in Files
 - Now the most important part, to call an API we need to make some changes in API's.
 ![enter image description here](https://radhakishan.vpran.in/file-list.png)
 
@@ -121,7 +121,7 @@ $this->connection = new mysqli("localhost", "root", "", "health_monitoring");
 	- health-monitoring" is your database name.
 - Change the database name as your respective database name.
 
-#### <i class="icon-refresh"></i> ⌨ Quick Test of API
+#### <i className="icon-refresh"></i> ⌨ Quick Test of API
 
 - Now we are going to check if our API is running or Not.
 - For that run Login.php in your browser by typing.
@@ -133,7 +133,7 @@ $this->connection = new mysqli("localhost", "root", "", "health_monitoring");
 - Hooray... Here we complete our API Integration.
 - Now we need to make some changes to React Code too.
 
-#### <i class="icon-pencil"></i> ✎ Change API URL
+#### <i className="icon-pencil"></i> ✎ Change API URL
 
 - Open your react folder code in your code editor. I am using [VS Code](https://code.visualstudio.com/).
 - Open ```constants.js``` from ```src``` folder and change the ```BASE_URL``` variable value into your API Url.
@@ -144,7 +144,7 @@ $this->connection = new mysqli("localhost", "root", "", "health_monitoring");
 ```
 export const BASE_URL = "http://localhost/health-monitoring-php";
 ```
-#### <i class="icon-refresh"></i> ✌ Run the Application
+#### <i className="icon-refresh"></i> ✌ Run the Application
 - After your npm command ```npm start``` completed you will see a screen like this.
 ![enter image description here](http://radhakishan.vpran.in/login.png)
 

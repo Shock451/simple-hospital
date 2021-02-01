@@ -1,25 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link, Redirect } from 'react-router-dom';
-import { fetchUserDetails } from '../helpers/api';
-// import * as myConstClass from '../constants';
+import { useAppContext } from '../Context';
+
+function capitalize(str){
+    return str[0].toUpperCase() + str.substr(1);
+}
 
 function Header(props) {
-    const [isLoading, setIsLoading] = useState([false]);
-    const [isData, setData] = useState([]);
-
-    useEffect(() => {
-        setIsLoading(true);
-        async function fetchData() {
-            const response = await fetchUserDetails();
-            if (response.status) {
-                setData(response);
-            } else {
-                signOut();
-            }
-            setIsLoading(false);
-        }
-        fetchData();
-    }, []);
+    const { appState } = useAppContext();
 
     function onClick(e) {
         e.preventDefault();
@@ -32,23 +20,15 @@ function Header(props) {
         )
     }
 
+    if (!localStorage.getItem('token')){
+        return <Redirect to='/login' />
+    }
 
     return (
         <div className="header">
-            {
-                !localStorage.getItem('tokens') ? <Redirect to='/login' /> : ''
-            }
             <div className="header-left">
-                <div className="page-title-box" >
-                    <h3>
-                        {
-                            !isLoading
-                                ?
-                                isData.data.type + " Panel"
-                                :
-                                null
-                        }
-                    </h3>
+                <div className="page-title-box d-block">
+                    <h3>{capitalize(appState?.user.role + " Panel")}</h3>
                 </div>
             </div>
 

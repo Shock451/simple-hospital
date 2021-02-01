@@ -1,17 +1,29 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { getPatients, getPatient } from "../models/patient.js";
+import {
+    getPatients,
+    getPatient,
+    getPatientProfile,
+
+    getReadingsByPatient,
+    getReadingByPatient,
+    addReadingsById,
+    updateReadingsById,
+    deleteReadingsById,
+} from "../models/patient.js";
 
 export default {
 
     getAllPatients: async (req, res) => {
 
-        let patients = await getPatients();
+        var search = req.query.search;
+
+        let patients = await getPatients(search);
 
         if (patients.length === 0) {
             res.status(404).json({
-                error: "There are no patients available",
+                err: "There are no patients available",
             });
             return;
         }
@@ -19,19 +31,139 @@ export default {
         res.status(200).json(patients);
     },
 
-    getPatientById: async (req, res) => {
+    getPatientByToken: async (req, res) => {
 
         const id = req._id;
 
-        let patient = await getPatient(id);
+        let patient = await getPatientProfile(id);
 
         if (!patient) {
             res.status(404).json({
-                error: "Patient does not exist",
+                err: "Patient does not exist",
             });
             return;
         }
 
         res.status(200).json(patient);
+    },
+
+    getPatientProfile: async (req, res) => {
+
+        const id = req.params.id;
+
+        let [user] = await getPatient(id);
+        let [patient] = await getPatientProfile(id);
+        let readings = await getReadingsByPatient(id);
+
+        if (!user) {
+            res.status(404).json({
+                err: "Patient does not exist",
+            });
+            return;
+        }
+
+        res.status(200).json({
+            user,
+            patient,
+            readings
+        });
+    },
+
+    getReadingsByPatientId: async (req, res) => {
+        const id = req._id;
+
+        let patient = await getReadingsByPatient(id);
+
+        if (!patient) {
+            res.status(404).json({
+                err: "No readings found",
+            });
+            return;
+        }
+
+        res.status(200).json(patient);
+    },
+
+    getReadingByPatientId: async (req, res) => {
+        const patient_id = req._id;
+
+        const id = req.params.id;
+
+        let [record] = await getReadingByPatient(id, patient_id);
+
+        if (!record) {
+            res.status(404).json({
+                err: "Not found",
+            });
+            return;
+        }
+
+        res.status(200).json(record);
+    },
+
+    postReadingsByPatientId: async (req, res) => {
+        const user_id = req._id;
+        const { blood_pressure, blood_sugar, heart_rate, temperature } = req.body;
+
+        let added = await addReadingsById({
+            patient_id: user_id,
+            blood_pressure,
+            blood_sugar,
+            heart_rate,
+            temperature
+        });
+
+        if (!added) {
+            res.status(500).json({
+                err: "An error occured",
+            });
+            return;
+        }
+
+        res.status(200).json({
+            msg: "Record added successfully"
+        });
+    },
+
+    updateReadingByPatientId: async (req, res) => {
+        const user_id = req._id;
+        const id = req.params.id;
+        const { blood_pressure, blood_sugar, heart_rate, temperature } = req.body;
+
+        let updated = await updateReadingsById(id, user_id, {
+            blood_pressure,
+            blood_sugar,
+            heart_rate,
+            temperature
+        });
+
+        if (!updated) {
+            res.status(500).json({
+                err: "An error occured",
+            });
+            return;
+        }
+
+        res.status(200).json({
+            msg: "Record updated successfully"
+        });
+    },
+
+    deleteReadingsByPatientId: async (req, res) => {
+        const user_id = req._id;
+        const reading_id = req.params.id;
+
+        let deleted = await deleteReadingsById(user_id, reading_id);
+
+        if (!deleted) {
+            res.status(500).json({
+                err: "An error occured",
+            });
+            return;
+        }
+
+        res.status(200).json({
+            msg: "Record deleted successfully"
+        });
     },
 }

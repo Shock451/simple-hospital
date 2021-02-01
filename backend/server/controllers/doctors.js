@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import { getDoctors, getDoctor } from "../models/doctor.js";
+import { getUsersById } from './../models/user';
 
 export default {
 
@@ -36,4 +37,24 @@ export default {
 
         res.status(200).json(doctor);
     },
+
+    getContactList: async (req, res) => {
+        const user_id = req._id;
+
+        let patientList
+        patientList = await fetchContactList(user_id);
+
+        res.status(200).json({ patientList });
+    },
+
+    getMessages: async (req, res) => {
+        const user_id = req._id;
+        const recipient_id = req.params.recipient_id;
+
+        const patientChat = await fetchMessages(user_id, recipient_id);
+        const [patientDetails] = await getUsersById(recipient_id);
+
+        res.status(200).json({ patientChat, patientDetails });
+    }
+
 }

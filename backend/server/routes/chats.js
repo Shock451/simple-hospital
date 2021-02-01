@@ -1,23 +1,15 @@
 import { Router } from "express";
-import ProviderController from "../controllers/chat";
+import ChatController from "../controllers/chat";
 
 import AuthMiddlewares from "../middlewares/auth";
 
 const router = Router();
 
-router.get('/flat-rates', AuthMiddlewares.authorize, ProviderController.getFlatRates);
+router.get("/:recipient_id", AuthMiddlewares.authorize, ChatController.getMessages);
 
-router.post('/flat-rates', AuthMiddlewares.authorize, ProviderController.createFlatRate);
+router.get("/", AuthMiddlewares.authorize, ChatController.getContactList);
 
-router.delete('/flat-rates/:id', AuthMiddlewares.authorize, ProviderController.deleteFlatRate);
-
-router.put('/flat-rates', AuthMiddlewares.authorize, ProviderController.updateFlatRate);
-
-router.get('/me', AuthMiddlewares.authorize, ProviderController.getProfile);
-
-router.patch('/me', AuthMiddlewares.authorize, ProviderController.updateProfile);
-
-router.patch('/manager', AuthMiddlewares.authorize, ProviderController.updateManagerProfile);
+router.post("/", AuthMiddlewares.authorize, ChatController.postMessage);
 
 export default router;
 
