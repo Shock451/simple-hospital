@@ -5,7 +5,7 @@ import AuthMiddlewares from "../middlewares/auth";
 
 const router = Router();
 
-router.get('/', AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, DoctorsController.getAllDoctors);
+router.get('/', AuthMiddlewares.authorize, DoctorsController.getAllDoctors);
 
 router.get("/me", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, DoctorsController.getDoctorById);
 

@@ -15,6 +15,7 @@ export const fetchUserDetails = async () => {
     return { status, data };
 }
 
+
 export const fetchPatientList = async (keyword) => {
     const token = localStorage.getItem('token');
     console.log(BASE_URL + '/patients' + (keyword ? `?search=${keyword}` : ''))
@@ -128,6 +129,54 @@ export const postPatientReadings = async (reading) => {
             temperature: reading.temperature,
             heart_rate: reading.heart_rate,
         })
+    });
+    const status = res.status;
+    const data = await res.json();
+    return { status, data };
+}
+
+export const postAppointment = async (appointment) => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/appointments', {
+        method: "POST",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify(appointment)
+    });
+    const status = res.status;
+    const data = await res.json();
+    return { status, data };
+}
+
+export const fetchDoctorList = async() => {
+    const token = localStorage.getItem('token');
+    // console.log(BASE_URL + '/doctors' + (keyword ? `?search=${keyword}` : ''))
+    const res = await fetch(BASE_URL + '/doctors', {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+            'Accept': 'application/json',
+        }
+    });
+    const status = res.status;
+    const data = await res.json();
+    return { status, data };
+}
+
+export const fetchAppointments = async() => {
+    const token = localStorage.getItem('token');
+    // console.log(BASE_URL + '/doctors' + (keyword ? `?search=${keyword}` : ''))
+    const res = await fetch(BASE_URL + '/appointments', {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+            'Accept': 'application/json',
+        }
     });
     const status = res.status;
     const data = await res.json();

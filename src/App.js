@@ -15,8 +15,10 @@ import ReadingsAdd from "./pages/ReadingsAdd";
 import ReadingsEdit from "./pages/ReadingsEdit";
 import PatientMessageList from "./pages/PatientMessageList";
 import PatientMessage from "./pages/PatientMessage";
-
+import MedsRefill from "./pages/MedsRefill";
+import ScheduleAppointment from "./pages/ScheduleAppointment.js";
 import { fetchUserDetails } from './helpers/api';
+import Appointments from './pages/Appointments';
 
 import { AppContext } from "./Context";
 import Loader from './components/Loader';
@@ -68,6 +70,9 @@ function App(props) {
                 <PrivateRoute path="/readings_edit/:id" component={ReadingsEdit} />
                 <PrivateRoute path="/patient_message_list" component={PatientMessageList} />
                 <PrivateRoute path="/patient_message/:id" component={PatientMessage} />
+                <PrivateRoute path="/meds_refill_request" component={MedsRefill} />
+                <PrivateRoute path="/schedule_appointment" component={ScheduleAppointment} />
+                <PrivateRoute path="/appointments" component={Appointments} />
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
                 <Route path="/forgotpassword" component={ForgotPassword} />

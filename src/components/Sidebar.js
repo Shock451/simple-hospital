@@ -20,6 +20,12 @@ function Sidebar(props) {
                             <li className={props.data.location.pathname === '/patient_message_list' ? 'active' : props.data.match.path === '/patient_message/:id' ? 'active' : ''}>
                                 <Link to={'/patient_message_list'}><i className="fa fa-inbox"></i> <span>Message Box</span></Link>
                             </li>
+                            <li className={props.data.location.pathname === '/meds_refill_request' ? 'active' : props.data.match.path === '/patient_message/:id' ? 'active' : ''}>
+                                <Link to={'/meds_refill_request'}><i className="fa fa-medkit"></i> <span>Request Meds Refill</span></Link>
+                            </li>
+                            <li className={props.data.location.pathname === '/appointments' ? 'active' : props.data.match.path === '/patient_message/:id' ? 'active' : ''}>
+                                <Link to={'/appointments'}><i className="fa fa-calendar"></i> <span>Appointments</span></Link>
+                            </li>
                         </ul>
                         :
                         null
@@ -31,6 +37,9 @@ function Sidebar(props) {
                             </li>
                             <li className={props.data.location.pathname === '/patient_list' ? 'active' : props.data.match.path === '/patient_details/:id' ? 'active' : ''}>
                                 <Link to={'/patient_list'}><i className="fa fa-users"></i> <span>Patient List</span></Link>
+                            </li>
+                            <li className={props.data.location.pathname === '/appointments' ? 'active' : props.data.match.path === '/patient_message/:id' ? 'active' : ''}>
+                                <Link to={'/appointments'}><i className="fa fa-calendar"></i> <span>Appointments</span></Link>
                             </li>
                         </ul>
                         :
