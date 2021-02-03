@@ -23,6 +23,11 @@ router.get("/:id/complete", AuthMiddlewares.authorize, AuthMiddlewares.only_doct
 
 // router.get('/readings/me', AuthMiddlewares.authorize, PatientController.getReadings);
 
+// patient_name
+// description
+// date
+// doctor_list
+
 export default router;
 
 

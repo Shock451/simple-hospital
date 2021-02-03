@@ -21,6 +21,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `appointments`
+--
+
+CREATE TABLE `appointments` (
+  `id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `doctor_id` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `description` text NOT NULL,
+  `status` enum('approved','pending','rejected') NOT NULL DEFAULT 'pending',
+  `created` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
 -- Table structure for table `chat`
 --
 
@@ -113,6 +127,11 @@ DELIMITER ;
 --
 
 --
+-- Indexes for table `appointments`
+--
+ALTER TABLE `appointments` ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `chat`
 --
 ALTER TABLE `chat` ADD PRIMARY KEY (`id`);
@@ -140,6 +159,12 @@ ALTER TABLE `users` ADD PRIMARY KEY (`id`);
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `appointments`
+--
+ALTER TABLE `appointments` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 
 --
 -- AUTO_INCREMENT for table `chat`
@@ -176,17 +201,7 @@ ALTER TABLE `users` MODIFY `id` int
 --
 
 INSERT INTO `users` (`name`, `mobile`, `email`, `password`, `role`, `last_login_time`, `created`, `updated`) VALUES
-('Cordelia Luna', '0709334789', 'nirikeh@odipafa.dz', '$2y$10$VEhimEu.o1cv5lmboOajKuxo6ntn7AbGo0rEkgLdSas3u.uhCmZhq', 'Patient', '2020-08-17 17:06:56', '2020-08-10 10:43:27', '2020-08-17 17:06:56'),
-('Jorge Rodriguez', '08036735365', 'jowpar@zu.jo', '$2y$10$kbJG2oKhGAbcpckFmqm1VudZOQvTQaQfqoj43HjURpz/fPg7FHtDq', 'Doctor', '2020-08-17 06:54:37', '2020-08-10 10:45:27', '2020-08-17 06:54:37'),
-('Manuel Casey', '07081378064', 'nihtawid@rorak.li', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Patient', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22'),
-('Edwin Rogers', '07055650884', 'kofop@kuw.id', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Doctor', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22'),
-('Aaron Fisher', '09029682793', 'ur@zinaete.vi', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Doctor', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22'),
-('Millie Fowler', '08050553268', 'garjig@basko.bj', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Doctor', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22'),
-('Mason Rice', '07097912384', 'gacuraj@vaepuzoj.st', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Doctor', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22'),
-('Roger Love', '08048214826', 'bawiuc@nazikbej.ga', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Doctor', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22'),
-('Charlie Bowman', '08034426429', 'aztalcid@ros.sj', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Patient', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22'),
-('Sean Lynch', '08035325264', 'ofuric@nusrut.ms', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Patient', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22'),
-('Brett Carson', '08071373295', 'mil@wigu.la', '$2y$10$ZCOfnmYhYVvH4SpUlO88ROKZvAzMvMt9k5liKKQ0iWeyoNS3bGR.e', 'Doctor', '2020-08-10 21:02:22', '2020-08-10 20:15:22', '2020-08-10 21:02:22');
+('Boluwarin Oladipo', '0709334789', 'oladipo5@gmail.com', '$2y$10$VEhimEu.o1cv5lmboOajKuxo6ntn7AbGo0rEkgLdSas3u.uhCmZhq', 'patient', '2020-08-17 17:06:56', '2020-08-10 10:43:27', '2020-08-17 17:06:56');
 
 COMMIT;
 

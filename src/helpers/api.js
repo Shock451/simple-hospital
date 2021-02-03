@@ -137,7 +137,7 @@ export const postPatientReadings = async (reading) => {
 
 export const postAppointment = async (appointment) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(BASE_URL + '/appointments', {
+    const res = await fetch(BASE_URL + '/appointments/me', {
         method: "POST",
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -170,7 +170,7 @@ export const fetchDoctorList = async() => {
 export const fetchAppointments = async() => {
     const token = localStorage.getItem('token');
     // console.log(BASE_URL + '/doctors' + (keyword ? `?search=${keyword}` : ''))
-    const res = await fetch(BASE_URL + '/appointments', {
+    const res = await fetch(BASE_URL + '/appointments/me', {
         method: "GET",
         headers: {
             'Authorization': `Bearer ${token}`,
