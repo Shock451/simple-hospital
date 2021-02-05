@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { fetchPatientReadings } from '../helpers/api';
+import { fetchAppointments, patchAppointment } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
-import {BASE_URL} from '../helpers/constants';
+import { BASE_URL } from '../helpers/constants';
 import { useAppContext } from "../Context";
-// import { convertDate } from '../helpers/functions';
+import { formatDateTime } from "../helpers/functions";
+import { capitalize } from '../helpers/functions';
 
 function Appointments(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -14,23 +15,20 @@ function Appointments(props) {
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const { appState } = useAppContext();
+    const role = appState.user.role;
 
     async function fetchData() {
         setIsLoading(true);
-        const { data } = await fetchPatientReadings();
-        setAppointments([]);
+        const { data } = await fetchAppointments();
+        setAppointments(data.appointments);
         setIsLoading(false);
     }
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    function deletePatient(id) {
+    function deleteAppointment(id) {
         setIsLoading(true);
         const token = localStorage.getItem('token');
         let status;
-        fetch(BASE_URL + '/patients/readings/' + id, {
+        fetch(BASE_URL + '/appointments/' + id, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -45,9 +43,9 @@ function Appointments(props) {
                 if (status) {
                     setIsLoading(false);
                     props.history.push({
-                        pathname: "/readings",
+                        pathname: "/appointments",
                         state: {
-                            success: "Appoint"
+                            success: "Appointment deleted successfully"
                         }
                     });
                     fetchData();
@@ -63,6 +61,33 @@ function Appointments(props) {
                 console.log(e);
             });
     }
+
+    const changeAppointmentState = async (id, state) => {
+        setIsLoading(true);
+        const { status, data } = await patchAppointment(id, state);
+        if (status === 200) {
+            const updatedAppointments = appointments.map(appointment => {
+                if (appointment.id === id) {
+                    appointment.status = state;
+                }
+                return appointment;
+            });
+            setAppointments(updatedAppointments);
+        } else {
+            setIsLoading(false);
+            setIsError(true);
+            setErrorMsg(data.err);
+        }
+        setIsLoading(false);
+    }
+
+
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
 
     return (
         <div className="main-wrapper">
@@ -86,10 +111,10 @@ function Appointments(props) {
                                     <li className="breadcrumb-item active">Appointments</li>
                                 </ul>
                             </div>
-                            { appState && appState.user.role === 'patient' && 
+                            {role === 'patient' &&
                                 <div className="col-auto float-right ml-auto">
-                                <Link to={'/schedule_appointment'} className="btn add-btn"><i className="fa fa-plus"></i> Schedule New Appointment</Link>
-                            </div>
+                                    <Link to={'/schedule_appointment'} className="btn add-btn"><i className="fa fa-plus"></i> Schedule New Appointment</Link>
+                                </div>
                             }
                         </div>
                     </div>
@@ -124,7 +149,7 @@ function Appointments(props) {
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Doctor</th>
+                                        <th>{`Name of ${role === 'doctor' ? 'patient' : "doctor"}`}</th>
                                         <th>Date and Time</th>
                                         <th>Reason for appointment</th>
                                         <th>Status</th>
@@ -136,16 +161,15 @@ function Appointments(props) {
                                     !isLoading
                                         ?
                                         <tbody>
-                                            {
+                                            { //JSX begins
                                                 appointments.map((data, index) => {
                                                     return (
                                                         <tr key={data.id}>
                                                             <td>{index + 1}</td>
-                                                            <td>{data.doctor_name}</td>
-                                                            <td>{data.datetime}</td>
-                                                           
+                                                            <td>{data.name}</td>
+                                                            <td>{formatDateTime(data.date)}</td>
                                                             <td>{data.description}</td>
-                                                            <td>{data.status}</td>
+                                                            <td>{capitalize(data.status)}</td>
                                                             <td className="text-right">
                                                                 <div className="dropdown dropdown-action">
                                                                     <button
@@ -154,23 +178,48 @@ function Appointments(props) {
                                                                         aria-expanded="false">
                                                                         <i className="material-icons">more_vert</i>
                                                                     </button>
+
                                                                     <div className="btn dropdown-menu dropdown-menu-right" x-placement="bottom-end">
-                                                                        {/* <Link
-                                                                            className="dropdown-item border-0 btn-transition btn passData"
-                                                                            to={'/readings_edit/' + data.id}
-                                                                            title="Edit">
-                                                                            <i className="fa fa-pencil"></i> Edit
-                                                                        </Link> */}
-                                                                        <button
-                                                                            className="btn dropdown-item border-0 btn-transition btn passData"
-                                                                            title="Cancel"
-                                                                            onClick={() => {
-                                                                                if (window.confirm('Are you sure you want to cancel this appointment?')) {
-                                                                                    deletePatient(data.id)
-                                                                                };
-                                                                            }}>
-                                                                            <i className="fa fa-trash"></i> Cancel
+
+                                                                        {role === 'doctor' ?
+                                                                            <>
+                                                                                <button
+                                                                                    className="btn dropdown-item border-0 btn-transition btn passData"
+                                                                                    title="Approve"
+                                                                                    onClick={() => {
+                                                                                        if (window.confirm('Are you sure you want to approve this appointment?')) {
+                                                                                            changeAppointmentState(data.id, "approved");
+                                                                                        };
+                                                                                    }}>
+                                                                                    <i className="fa fa-check"></i> Approve
                                                                         </button>
+
+                                                                                <button
+                                                                                    className="btn dropdown-item border-0 btn-transition btn passData"
+                                                                                    title="Reject"
+                                                                                    onClick={() => {
+                                                                                        if (window.confirm('Are you sure you want to reject this appointment?')) {
+                                                                                            changeAppointmentState(data.id, "rejected");
+                                                                                        };
+                                                                                    }}>
+                                                                                    <i className="fa fa-times"></i> Reject
+                                                                        </button>
+                                                                            </>
+
+                                                                            :
+
+                                                                            <button
+                                                                                className="btn dropdown-item border-0 btn-transition btn passData"
+                                                                                title="Cancel"
+                                                                                onClick={() => {
+                                                                                    if (window.confirm('Are you sure you want to cancel this appointment?')) {
+                                                                                        deleteAppointment(data.id)
+                                                                                    };
+                                                                                }}>
+                                                                                <i className="fa fa-trash"></i> Cancel
+                                                                        </button>
+
+                                                                        }
                                                                     </div>
                                                                 </div>
                                                             </td>

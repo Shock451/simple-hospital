@@ -183,6 +183,22 @@ export const fetchAppointments = async() => {
     return { status, data };
 }
 
+export const patchAppointment = async (id, state) => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/appointments', {
+        method: "PATCH",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({id, status:state})
+    });
+    const status = res.status;
+    const data = await res.json();
+    return { status, data };
+}
+
 export const putPatientReadings = async (reading, id) => {
     const token = localStorage.getItem('token');
     const res = await fetch(BASE_URL + '/patients/readings/' + id, {
@@ -203,3 +219,5 @@ export const putPatientReadings = async (reading, id) => {
     const data = await res.json();
     return { status, data };
 }
+
+

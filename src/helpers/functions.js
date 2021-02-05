@@ -19,6 +19,10 @@ export function formatDate(date) {
     return [day, month, year].join('-');
 }
 
+export function capitalize(str) {
+    return str[0].toUpperCase() + str.substring(1); 
+}
+
 export function formatTime(date) {
     var d = new Date(date),
         hr = '' + d.getHours(),
@@ -28,10 +32,11 @@ export function formatTime(date) {
     return `${hr}:${min} ${mer}`;
 }
 
-export function formatDateTime(date) {
+export function formatDateTime(input) {
 
-    const full_date = formatDate(date);
-    const full_time = formatTime(date);
+    let dateTime = new Date(input);
+    const full_date = dateTime.toLocaleDateString();
+    const full_time = dateTime.toLocaleTimeString();
 
     return full_date + " " + full_time
 }

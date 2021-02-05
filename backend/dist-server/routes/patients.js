@@ -22,5 +22,10 @@ router.get("/:id/complete", _auth.default.authorize, _auth.default.only_doctors,
 // router.post("/messages/:id", AuthMiddlewares.authorize, AuthMiddlewares.only_patients, PatientController.getContactList);
 
 // router.get('/readings/me', AuthMiddlewares.authorize, PatientController.getReadings);
+
+// patient_name
+// description
+// date
+// doctor_list
 var _default =
 router;exports.default = _default;

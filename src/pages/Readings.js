@@ -45,7 +45,7 @@ function Readings(props) {
                     props.history.push({
                         pathname: "/readings",
                         state: {
-                            success: "Readings deleted successfully"
+                            success: "Reading deleted successfully"
                         }
                     });
                     fetchData();

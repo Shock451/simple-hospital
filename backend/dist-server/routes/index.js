@@ -3,7 +3,8 @@
 var _doctors = _interopRequireDefault(require("./doctors"));
 var _patients = _interopRequireDefault(require("./patients"));
 var _chats = _interopRequireDefault(require("./chats"));
-var _users = _interopRequireDefault(require("./users"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+var _users = _interopRequireDefault(require("./users"));
+var _appointments = _interopRequireDefault(require("./appointments"));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
 
 var router = (0, _express.Router)();
 
@@ -13,6 +14,7 @@ router.get('/', function (req, res) {
 
 });
 
+router.use("/appointments", _appointments.default);
 router.use("/doctors", _doctors.default);
 router.use("/users", _users.default);
 router.use("/patients", _patients.default);

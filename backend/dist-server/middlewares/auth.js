@@ -12,14 +12,14 @@ APP_SECRET = process.env.APP_SECRET;var _default =
       req._role = decoded['role'];
       next();
     } catch (error) {
-      res.status(401).json({ message: "Authentication failed." });
+      res.status(401).json({ err: "Authentication failed." });
     }
   },
 
   only_patients: function only_patients(req, res, next) {
     var role = req._role;
     if (role !== _constants.ROLES[0]) {// ROLES[0] is patient
-      res.status(400).json({ message: "Authorized patients only." });
+      res.status(400).json({ err: "Authorized patients only." });
     } else {
       next();
     }
@@ -28,7 +28,7 @@ APP_SECRET = process.env.APP_SECRET;var _default =
   only_doctors: function only_doctors(req, res, next) {
     var role = req._role;
     if (role !== _constants.ROLES[1]) {// ROLES[0] is doctorr
-      res.status(400).json({ message: "Authorized doctors only." });
+      res.status(400).json({ err: "Authorized doctors only." });
     } else {
       next();
     }

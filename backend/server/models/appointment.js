@@ -1,8 +1,15 @@
+import { ROLES } from "../helpers/constants.js";
 import { doQueryParams } from "../setup/db.js";
 
 export const fetchAppointmentsById = async (id, role) => {
-    let query = `SELECT * FROM appointments WHERE ${role}_id = ?`;
+    let inverted_role = ROLES[0];
+    if(role === ROLES[0]){
+        inverted_role = ROLES[1];
+    }
+    let query = `SELECT appointments.*, users.name FROM appointments, users 
+    WHERE appointments.${role}_id = ? AND appointments.${inverted_role}_id = users.id `;
     return doQueryParams(query, [id]);
+    
 }
 
 export const createAppointment = async (data) => {

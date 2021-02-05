@@ -34,7 +34,7 @@ function ScheduleAppointment(props) {
     async function postSubmit(appointment) {
         setIsLoading(true);
         const { status, data } = await postAppointment(appointment)
-        if (status) {
+        if (status === 200) {
             props.history.push({
                 pathname: "/appointments",
                 state: {
@@ -100,7 +100,7 @@ function ScheduleAppointment(props) {
                                         <label> Doctor <em>*</em></label>
                                         <select className="form-control" name="doctor_id" ref={register}>
                                             {doctorList && doctorList.map(doctor => (
-                                                <option key={`doctor-${doctor.id}`} value={doctor.id}>{doctor.name}</option>
+                                                <option key={`doctor-${doctor.id}`} value={doctor.id}>{doctor.name}</option> //doctor.id gets passed to the api since it is the value and doctor.name is displayed in the drop down list
                                             ))}
                                         </select>
                                         {errors.doctor_id && <label className="error">{errors.doctor_id.message}</label>}
@@ -111,18 +111,20 @@ function ScheduleAppointment(props) {
                                                 <label>Reason for appointment<em>*</em></label>
                                                 <textarea ref={register({
                                                     required: "This field is required",
-                                                    pattern: {
-                                                        value: /^[0-9]*$/i,
-                                                        message: "Please enter a reason for scheduling this appointment"
-                                                    },
+                                                    maxLength:1000
+                                                   
                                                 })} className="form-control" name="description" type="text" placeholder="Reason For Appointment"> </textarea> 
                                                 {errors.description && <label className="error">{errors.description.message}</label>}
                                                 
                                             </div>
                                             <div className="col-md-12 mt-3">
                                                 <label>Date and Time<em>*</em></label>
-                                                <input className="form-control" name="datetime" type="datetime-local"/>
-                                                
+                                                <input ref={register({
+                                                    required: "This field is required",
+
+                                                   
+                                                })} className="form-control" name="date" type="datetime-local" min="" max=""/>
+                                                {errors.date && <label className="error">{errors.date.message}</label>}
                                             </div>
                                         </div>
                                         <div className="form-actions text-right">
