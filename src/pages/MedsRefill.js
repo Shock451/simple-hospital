@@ -1,37 +1,93 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { fetchPatientList } from '../helpers/api';
+import { fetchRequests, patchRequest } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
+import { BASE_URL } from '../helpers/constants';
+import { useAppContext } from "../Context";
+import { formatDateTime } from "../helpers/functions";
+import { capitalize } from '../helpers/functions';
 
 function MedsRefill(props) {
     const [isLoading, setIsLoading] = useState(true);
-    const [isSearch, setSearch] = useState("");
-    const [isData, setData] = useState([]);
-    const [isSearchLoading, setSearchLoading] = useState(false);
+    const [medsrefill, setRequest] = useState([]);
+    const [isError, setIsError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+    const { appState } = useAppContext();
+    const role = appState.user.role;
+
+    async function fetchData() {
+        setIsLoading(true);
+        const { data } = await fetchRequests();
+        setRequest(data.appointments);
+        setIsLoading(false);
+    }
+
+    function deleteRequest(id) {
+        setIsLoading(true);
+        const token = localStorage.getItem('token');
+        let status;
+        fetch(BASE_URL + '/meds-refill/' + id, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': "application/json",
+                'Accept': 'application/json',
+            }
+        }).then((response) => {
+            status = response.status;
+            return response.json();
+        })
+            .then((result) => {
+                if (status) {
+                    setIsLoading(false);
+                    props.history.push({
+                        pathname: "/meds-refill",
+                        state: {
+                            success: "Request deleted successfully"
+                        }
+                    });
+                    fetchData();
+                } else {
+                    setIsLoading(false);
+                    setIsError(true);
+                    setErrorMsg(result.message);
+                }
+            }).catch(e => {
+                setIsLoading(false);
+                setIsError(true);
+                setErrorMsg("Not able to connect with API try again after sometime.");
+                console.log(e);
+            });
+    }
+
+    const changeRequestState = async (id, state) => {
+        setIsLoading(true);
+        const { status, data } = await patchRequest(id, state);
+        if (status === 200) {
+            const updatedRequests = medsrefill.map(medsrefill => {
+                if (medsrefill.id === id) {
+                    medsrefill.status = state;
+                }
+                return medsrefill;
+            });
+            setRequest(updatedRequests);
+        } else {
+            setIsLoading(false);
+            setIsError(true);
+            setErrorMsg(data.err);
+        }
+        setIsLoading(false);
+    }
+
+
+
 
     useEffect(() => {
-        setIsLoading(true);
-        async function fetchData() {
-            const response = await fetchPatientList();
-            setData(response);
-            setIsLoading(false);
-        }
         fetchData();
     }, []);
 
-    function searchPatient(event) {
-        let keyword = event.target.value;
-        setSearch(keyword);
-        setSearchLoading(true);
-        async function fetchData() {
-            const response = await fetchPatientList(keyword);
-            setData(response);
-            setSearchLoading(false);
-        }
-        fetchData();
-    }
 
     return (
         <div className="main-wrapper">
@@ -50,56 +106,133 @@ function MedsRefill(props) {
                     <div className="page-header">
                         <div className="row align-items-center">
                             <div className="col">
-                                <h3 className="page-title">Patient</h3>
+                                <h3 className="page-title">Meds Requests</h3>
                                 <ul className="breadcrumb">
-                                    <li className="breadcrumb-item active">Patient List</li>
+                                    <li className="breadcrumb-item active">Meds Requests</li>
                                 </ul>
                             </div>
+                            {role === 'patient' &&
+                                <div className="col-auto float-right ml-auto">
+                                    <Link to={'/medsrefillrequest'} className="btn add-btn"><i className="fa fa-plus"></i> Request Meds</Link>
+                                </div>
+                            }
                         </div>
                     </div>
-
-                    <div className="row filter-row">
-                        <div className="col-sm-6 col-md-4">
-                            <div className="form-group form-focus">
-                                <input type="text" className="form-control floating" defaultValue={isSearch} onChange={(e) => searchPatient(e)} />
-                                <label className="focus-label">Search by Patient Name</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="row staff-grid-row">
-                        {
-                            !isLoading
+                    {
+                        props.location.state
+                            ?
+                            props.location.state.success
                                 ?
-                                isData.data.length > 0
-                                    ?
-                                    isSearchLoading
-                                        ?
-                                        <div className="col-md-12">
-                                            <h4>Loading...</h4>
-                                        </div>
-                                        :
-                                        isData.data.map(function (data) {
-                                            return (
-                                                <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={data.id}>
-                                                    <div className="profile-widget">
-                                                        <h4 className="user-name m-t-10 mb-0 text-ellipsis"><Link to={'/patient_details/' + data.id}>{data.name}</Link></h4>
-                                                        <h5 className="user-name m-t-10 mb-0 text-ellipsis"><a href={'mailto:' + data.email}>{data.email}</a></h5>
-                                                        <h5 className="user-name m-t-10 mb-0 text-ellipsis"><a href={'tel:' + data.mobile}>{data.mobile}</a></h5>
-                                                        <Link to={'/doctor_message/' + data.id} className="btn btn-white btn-sm m-t-10 m-r-5">Message</Link>
-                                                        <Link to={'/patient_details/' + data.id} className="btn btn-white btn-sm m-t-10">View Profile</Link>
-                                                    </div>
-                                                </div>
-                                            )
-                                        })
-                                    :
-                                    <div className="col-md-12">
-                                        <h4>No appointments today.</h4>
-                                    </div>
+                                <div className="alert alert-success alert-dismissible" role="alert">
+                                    <button type="button" className="close" data-dismiss="alert">
+                                    </button> {props.location.state.success}
+                                </div>
                                 :
                                 null
-                        }
+                            :
+                            null
+                    }
+                    {
+                        isError
+                            ?
+                            <div className="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" className="close" data-dismiss="alert">
+                                </button>
+                                {errorMsg}
+                            </div>
+                            :
+                            null
+                    }
+                    <div className="row">
+                        <div className="col-md-12">
+                            <table className="table table-striped custom-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{`Name of ${role === 'doctor' ? 'patient' : "doctor"}`}</th>
+                                        <th>Date and Time</th>
+                                        <th>Reason for request</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                {
 
+                                    !isLoading
+                                        ?
+                                        <tbody>
+                                            { //JSX begins
+                                                medsrefill.map((data, index) => {
+                                                    return (
+                                                        <tr key={data.id}>
+                                                            <td>{index + 1}</td>
+                                                            <td>{data.name}</td>
+                                                            <td>{formatDateTime(data.date)}</td>
+                                                            <td>{data.description}</td>
+                                                            <td>{capitalize(data.status)}</td>
+                                                            <td className="text-right">
+                                                                <div className="dropdown dropdown-action">
+                                                                    <button
+                                                                        className="action-icon dropdown-toggle"
+                                                                        data-toggle="dropdown"
+                                                                        aria-expanded="false">
+                                                                        <i className="material-icons">more_vert</i>
+                                                                    </button>
+
+                                                                    <div className="btn dropdown-menu dropdown-menu-right" x-placement="bottom-end">
+
+                                                                        {role === 'doctor' ?
+                                                                            <>
+                                                                                <button
+                                                                                    className="btn dropdown-item border-0 btn-transition btn passData"
+                                                                                    title="Approve"
+                                                                                    onClick={() => {
+                                                                                        if (window.confirm('Are you sure you want to approve this request?')) {
+                                                                                            changeRequestState(data.id, "approved");
+                                                                                        };
+                                                                                    }}>
+                                                                                    <i className="fa fa-check"></i> Approve
+                                                                        </button>
+
+                                                                                <button
+                                                                                    className="btn dropdown-item border-0 btn-transition btn passData"
+                                                                                    title="Reject"
+                                                                                    onClick={() => {
+                                                                                        if (window.confirm('Are you sure you want to reject this request?')) {
+                                                                                            changeRequestState(data.id, "rejected");
+                                                                                        };
+                                                                                    }}>
+                                                                                    <i className="fa fa-times"></i> Reject
+                                                                        </button>
+                                                                            </>
+
+                                                                            :
+
+                                                                            <button
+                                                                                className="btn dropdown-item border-0 btn-transition btn passData"
+                                                                                title="Cancel"
+                                                                                onClick={() => {
+                                                                                    if (window.confirm('Are you sure you want to cancel this request?')) {
+                                                                                        deleteRequest(data.id)
+                                                                                    };
+                                                                                }}>
+                                                                                <i className="fa fa-trash"></i> Cancel
+                                                                        </button>
+
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                        :
+                                        null
+                                }
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -22,12 +22,13 @@ import Appointments from './pages/Appointments';
 
 import { AppContext } from "./Context";
 import Loader from './components/Loader';
+import MedsRefillRequest from "./pages/MedsRefillRequest";
 
 function App(props) {
     const [authToken, setAuthToken] = useState(localStorage.getItem("token") || "");
     // eslint-disable-next-line
     const [appState, setAppState] = useState(null);
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setLoading] = useState(true);
 
     const setToken = (data) => {
         localStorage.setItem("token", data);
@@ -36,7 +37,6 @@ function App(props) {
 
     useEffect(() => {
         async function fetchData() {
-            setLoading(true);
             const { data } = await fetchUserDetails();
             setAppState({ user: data });
             setLoading(false);
@@ -44,6 +44,8 @@ function App(props) {
         if (authToken) {
             console.log("We are in App and fetching");
             fetchData();
+        } else{
+            setLoading(false);
         }
     }, [authToken]);
 
@@ -70,9 +72,10 @@ function App(props) {
                 <PrivateRoute path="/readings_edit/:id" component={ReadingsEdit} />
                 <PrivateRoute path="/patient_message_list" component={PatientMessageList} />
                 <PrivateRoute path="/patient_message/:id" component={PatientMessage} />
-                <PrivateRoute path="/meds_refill_request" component={MedsRefill} />
                 <PrivateRoute path="/schedule_appointment" component={ScheduleAppointment} />
                 <PrivateRoute path="/appointments" component={Appointments} />
+                <PrivateRoute path="/medsrefillrequest" component={MedsRefillRequest} />
+                <PrivateRoute path="/meds-refill" component={MedsRefill} />
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
                 <Route path="/forgotpassword" component={ForgotPassword} />

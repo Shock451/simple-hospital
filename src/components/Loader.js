@@ -6,8 +6,8 @@ function Loader(props) {
     return (
         <div id="loader-wrapper">
             <div className="loader">
-                <img src={logo} alt="Health Monitoring Logo" />
-                <h2>Please Wait...</h2>
+                <img src={logo} alt="EHR Web App Logo" />
+                <h2>Loading...</h2>
             </div>
         </div>
     )

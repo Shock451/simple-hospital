@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2021 at 06:55 AM
--- Server version: 10.4.8-MariaDB
--- PHP Version: 7.3.11
+-- Generation Time: Feb 09, 2021 at 10:08 PM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 8.0.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -17,6 +16,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `doctor-patient-portal`
+--
 
 -- --------------------------------------------------------
 
@@ -28,11 +31,13 @@ CREATE TABLE `appointments` (
   `id` int(11) NOT NULL,
   `patient_id` int(11) NOT NULL,
   `doctor_id` int(11) NOT NULL,
-  `date` datetime NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `description` text NOT NULL,
   `status` enum('approved','pending','rejected') NOT NULL DEFAULT 'pending',
   `created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `chat`
@@ -62,6 +67,24 @@ CREATE TABLE `doctors` (
   `updated` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `medsrefill`
+--
+
+CREATE TABLE `medsrefill` (
+  `id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `doctor_id` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `status` enum('approved','pending','rejected','') NOT NULL DEFAULT 'pending',
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `patients`
 --
@@ -77,6 +100,8 @@ CREATE TABLE `patients` (
   `updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `patient_readings`
 --
@@ -91,6 +116,8 @@ CREATE TABLE `patient_readings` (
   `created` datetime NOT NULL DEFAULT current_timestamp(),
   `updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `users`
@@ -129,32 +156,44 @@ DELIMITER ;
 --
 -- Indexes for table `appointments`
 --
-ALTER TABLE `appointments` ADD PRIMARY KEY (`id`);
+ALTER TABLE `appointments`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `chat`
 --
-ALTER TABLE `chat` ADD PRIMARY KEY (`id`);
+ALTER TABLE `chat`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `doctors`
 --
-ALTER TABLE `doctors` ADD PRIMARY KEY (`id`);
+ALTER TABLE `doctors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `medsrefill`
+--
+ALTER TABLE `medsrefill`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `patients`
 --
-ALTER TABLE `patients` ADD PRIMARY KEY (`id`);
+ALTER TABLE `patients`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `patient_readings`
 --
-ALTER TABLE `patient_readings` ADD PRIMARY KEY (`id`);
+ALTER TABLE `patient_readings`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
 --
-ALTER TABLE `users` ADD PRIMARY KEY (`id`);
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -163,46 +202,44 @@ ALTER TABLE `users` ADD PRIMARY KEY (`id`);
 --
 -- AUTO_INCREMENT for table `appointments`
 --
-ALTER TABLE `appointments` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
+ALTER TABLE `appointments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `chat`
 --
-ALTER TABLE `chat` MODIFY `id` int
-(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+ALTER TABLE `chat`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `doctors`
 --
-ALTER TABLE `doctors` MODIFY `id` int
-(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+ALTER TABLE `doctors`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `medsrefill`
+--
+ALTER TABLE `medsrefill`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `patients`
 --
-ALTER TABLE `patients` MODIFY `id` int
-(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+ALTER TABLE `patients`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `patient_readings`
 --
-ALTER TABLE `patient_readings` MODIFY `id` int
-(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+ALTER TABLE `patient_readings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `users` MODIFY `id` int
-(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`name`, `mobile`, `email`, `password`, `role`, `last_login_time`, `created`, `updated`) VALUES
-('Boluwarin Oladipo', '0709334789', 'oladipo5@gmail.com', '$2y$10$VEhimEu.o1cv5lmboOajKuxo6ntn7AbGo0rEkgLdSas3u.uhCmZhq', 'patient', '2020-08-17 17:06:56', '2020-08-10 10:43:27', '2020-08-17 17:06:56');
-
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

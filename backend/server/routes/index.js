@@ -5,6 +5,7 @@ import patientsRouter from "./patients";
 import chatsRouter from "./chats";
 import usersRouter from "./users";
 import appointmentsRouter from './appointments';
+import medsRefillRouter from './meds-refill';
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use("/doctors", doctorsRouter);
 router.use("/users", usersRouter);
 router.use("/patients", patientsRouter);
 router.use("/chats", chatsRouter);
+router.use("/meds-refill", medsRefillRouter);
 
 export default router;
