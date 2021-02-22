@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 22, 2021 at 12:09 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 8.0.0
+-- Host: localhost
+-- Generation Time: Feb 22, 2021 at 05:24 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -84,7 +84,7 @@ CREATE TABLE `doctors` (
   `city` varchar(150) DEFAULT NULL,
   `state` varchar(200) DEFAULT NULL,
   `description` text DEFAULT NULL,
-  `license_num` int(11) NOT NULL,
+  `license_num` varchar(20) DEFAULT NULL,
   `gender` enum('male','female') DEFAULT NULL,
   `updated` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -94,9 +94,10 @@ CREATE TABLE `doctors` (
 --
 
 INSERT INTO `doctors` (`id`, `user_id`, `address`, `city`, `state`, `description`, `license_num`, `gender`, `updated`) VALUES
-(1, 1, NULL, NULL, NULL, NULL, 0, 'male', '0000-00-00 00:00:00'),
-(2, 3, NULL, NULL, NULL, NULL, 0, 'male', '0000-00-00 00:00:00'),
-(3, 5, NULL, NULL, NULL, NULL, 0, 'male', '0000-00-00 00:00:00');
+(1, 1, NULL, NULL, NULL, NULL, '0', 'male', '0000-00-00 00:00:00'),
+(2, 3, NULL, NULL, NULL, NULL, '0', 'male', '0000-00-00 00:00:00'),
+(3, 5, NULL, NULL, NULL, NULL, '0', 'male', '0000-00-00 00:00:00'),
+(4, 8, 'yadayaydyadya', 'Ejigbo', 'Lago', 'ljkdknsdknskdnsdffff', '892379483y823821', 'male', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -131,9 +132,9 @@ INSERT INTO `medsrefill` (`id`, `patient_id`, `doctor_id`, `description`, `statu
 CREATE TABLE `patients` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `dob` datetime DEFAULT NULL,
-  `gender` enum('male','female') NOT NULL,
-  `allergies` varchar(1000) NOT NULL,
+  `dob` timestamp NULL DEFAULT NULL,
+  `gender` enum('male','female') DEFAULT NULL,
+  `allergies` varchar(1000) DEFAULT NULL,
   `address` text DEFAULT NULL,
   `city` varchar(150) DEFAULT NULL,
   `state` varchar(255) DEFAULT NULL,
@@ -149,7 +150,8 @@ CREATE TABLE `patients` (
 INSERT INTO `patients` (`id`, `user_id`, `dob`, `gender`, `allergies`, `address`, `city`, `state`, `description`, `created`, `updated`) VALUES
 (1, 2, NULL, 'male', '', NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '2021-02-10 16:49:36'),
 (2, 4, NULL, 'male', '', NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '2021-02-14 18:08:11'),
-(3, 6, NULL, 'male', '', NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '2021-02-14 18:13:32');
+(3, 6, NULL, 'male', '', NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '2021-02-14 18:13:32'),
+(4, 7, '2021-01-27 00:00:00', 'male', 'Oluwa is involved', 'Bolu\'s residence', 'City Idk', 'Idk either', 'ssscs', '0000-00-00 00:00:00', '2021-02-22 00:58:40');
 
 -- --------------------------------------------------------
 
@@ -160,13 +162,13 @@ INSERT INTO `patients` (`id`, `user_id`, `dob`, `gender`, `allergies`, `address`
 CREATE TABLE `patient_readings` (
   `id` int(11) NOT NULL,
   `patient_id` int(11) DEFAULT NULL,
-  `blood_sugar` int(11) DEFAULT NULL,
-  `blood_pressure` int(11) DEFAULT NULL,
-  `heart_rate` int(11) DEFAULT NULL,
-  `temperature` int(11) DEFAULT NULL,
-  `height` float NOT NULL,
-  `weight` float NOT NULL,
-  `prescribed` int(5) NOT NULL,
+  `blood_sugar` float DEFAULT NULL,
+  `blood_pressure` float DEFAULT NULL,
+  `heart_rate` float DEFAULT NULL,
+  `temperature` float DEFAULT NULL,
+  `height` float DEFAULT NULL,
+  `weight` float DEFAULT NULL,
+  `prescribed` int(5) DEFAULT NULL,
   `prescription` varchar(1000) DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT current_timestamp(),
   `updated` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -177,7 +179,49 @@ CREATE TABLE `patient_readings` (
 --
 
 INSERT INTO `patient_readings` (`id`, `patient_id`, `blood_sugar`, `blood_pressure`, `heart_rate`, `temperature`, `height`, `weight`, `prescribed`, `prescription`, `created`, `updated`) VALUES
-(1, 6, 56, 89, 334, 36, 0, 0, 0, NULL, '2021-02-14 18:17:20', '2021-02-14 18:17:20');
+(5, 7, 56, 56, 56, 56, 56, 56, 563, '56 no', '2021-02-22 02:42:08', '2021-02-22 03:17:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `radiologists`
+--
+
+CREATE TABLE `radiologists` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `address` text DEFAULT NULL,
+  `city` varchar(150) DEFAULT NULL,
+  `state` varchar(200) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `license_num` varchar(20) DEFAULT NULL,
+  `gender` enum('male','female') DEFAULT NULL,
+  `updated` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `radiologists`
+--
+
+INSERT INTO `radiologists` (`id`, `user_id`, `address`, `city`, `state`, `description`, `license_num`, `gender`, `updated`) VALUES
+(1, 1, NULL, NULL, NULL, NULL, '0', 'male', '0000-00-00 00:00:00'),
+(2, 3, NULL, NULL, NULL, NULL, '0', 'male', '0000-00-00 00:00:00'),
+(3, 5, NULL, NULL, NULL, NULL, '0', 'male', '0000-00-00 00:00:00'),
+(4, 8, 'yadayaydyadya', 'Ejigbo', 'Lago', 'ljkdknsdknskdnsdffff', '892379483y823821', 'male', '0000-00-00 00:00:00'),
+(5, 13, NULL, NULL, NULL, NULL, NULL, NULL, '2021-02-22 04:14:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `radiology_scans`
+--
+
+CREATE TABLE `radiology_scans` (
+  `id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `image_uri` varchar(256) NOT NULL,
+  `report` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -191,7 +235,7 @@ CREATE TABLE `users` (
   `mobile` varchar(20) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('doctor','patient') NOT NULL,
+  `role` enum('doctor','patient','radiologist') NOT NULL,
   `last_login_time` timestamp NULL DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated` timestamp NULL DEFAULT NULL
@@ -207,7 +251,12 @@ INSERT INTO `users` (`id`, `name`, `mobile`, `email`, `password`, `role`, `last_
 (3, 'Yeni', '09875756542', 'doctor@test.com', '$2a$10$K17bOgS68RV6oDVaXivvo.iyd1FlAEzlr45vTmz4TTyN0Tq9rpDJ.', 'doctor', NULL, '2021-02-14 17:07:11', NULL),
 (4, 'Yeni As Well', '09876543212', 'patient3@test.com', '$2a$10$RJXtOCWZm8BnQZYs8DwuVuCNpJ7ncsrizKmX5RVoBn0x8dnlUAw2y', 'patient', NULL, '2021-02-14 17:08:11', NULL),
 (5, 'Joel', '04939840878', 'joel@test.com', '$2a$10$Gq2HDQwX/3hGNMj/s14SLe0oWtQimpP4FauvFdwpXmMGxpAP8iCtS', 'doctor', NULL, '2021-02-14 17:13:05', NULL),
-(6, 'Yeni', '04939840878', 'yeni@test.com', '$2a$10$f2b5e8U5HTf.LnYmg9OJmeNV2ww8RQfszLG9LuiPAEvSooL0fq6.q', 'patient', NULL, '2021-02-14 17:13:32', NULL);
+(6, 'Yeni', '04939840878', 'yeni@test.com', '$2a$10$f2b5e8U5HTf.LnYmg9OJmeNV2ww8RQfszLG9LuiPAEvSooL0fq6.q', 'patient', NULL, '2021-02-14 17:13:32', NULL),
+(7, 'Abdulskosko', '09061279159', 'ayobami.oladosu@aol.com', '$2a$10$3ByMu1dQ01FjmEo50K2u4.yzgYQqFohn.O1Yevo1hqXj/xXk2AxYO', 'patient', NULL, '2021-02-21 23:41:16', NULL),
+(8, 'OladosuA', '09061279157', 'oladosua@gmail.com', '$2a$10$hRwWFP0ld7dCiMawIm5R8ulpu9SsMMFmPNxOhAAlpoX9U03eJMSCW', 'doctor', NULL, '2021-02-21 23:57:58', NULL),
+(9, 'Doyin', '09061279150', 'doyin@gmail.com', '$2a$10$6vIVc.xDSGcn5UrkXZ8o6.FtPsYXOLmFi8kjIKXBxVB6TnasuBshe', 'radiologist', NULL, '2021-02-22 03:54:16', NULL),
+(10, 'sss', '09061279155', 'sss@gmail.com', '$2a$10$/uiWQxIof32OEbI634F7DeEwx36U3oQFPIbXC8c1r7gpA1LOyoQJS', 'radiologist', NULL, '2021-02-22 04:05:01', NULL),
+(13, 'hhh', '09061279150', 'hhh@gmail.com', '$2a$10$YNR40iueELbf3Y0rvetZtOLDWiE1keduAuVC3N4ygG1PZPtGE94Gy', 'radiologist', NULL, '2021-02-22 04:14:54', NULL);
 
 --
 -- Triggers `users`
@@ -218,6 +267,8 @@ CREATE TRIGGER `after_user_insert` AFTER INSERT ON `users` FOR EACH ROW BEGIN
         INSERT INTO patients(user_id) VALUES(new.id);
     ELSEIF NEW.role='doctor' THEN
         INSERT INTO doctors(user_id) VALUES(new.id);
+    ELSEIF NEW.role='radiologist' THEN
+        INSERT INTO radiologists(user_id) VALUES(new.id);
     END IF;
 END
 $$
@@ -264,6 +315,18 @@ ALTER TABLE `patient_readings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `radiologists`
+--
+ALTER TABLE `radiologists`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `radiology_scans`
+--
+ALTER TABLE `radiology_scans`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -289,7 +352,7 @@ ALTER TABLE `chat`
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `medsrefill`
@@ -301,19 +364,31 @@ ALTER TABLE `medsrefill`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `patient_readings`
 --
 ALTER TABLE `patient_readings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `radiologists`
+--
+ALTER TABLE `radiologists`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `radiology_scans`
+--
+ALTER TABLE `radiology_scans`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

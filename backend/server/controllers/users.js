@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -33,29 +34,36 @@ export default {
             mobile: user.mobile,
             name: user.name,
             role: user.role,
-            address: userDetails.address,
-            city: userDetails.city,
-            state: userDetails.state,
-            description: userDetails.description
+            ...userDetails
         });
     },
 
     updateUserProfile: async (req, res) => {
         const user_id = req._id;
         const role = req._role;
-        const { address, description, city, state, email, name, mobile, old_password, password, password2 } = req.body;
+        
+        const { address, gender, description, city, state, email, name, mobile, old_password, password, password2 } = req.body;
 
         const data = {
             address,
             description,
+            gender,
             city,
             state,
             email,
             name,
-            mobile
+            mobile,
+            ...role === ROLES[0] ?
+                {
+                    allergies: req.body.allergies,
+                    dob: req.body.dob
+                } :
+                {
+                    license_num: req.body.license_num
+                }
         };
 
-        if (email){
+        if (email) {
             let [user] = await getUsersByEmail(email);
 
             if (user_id !== user.id && user.email === email) {

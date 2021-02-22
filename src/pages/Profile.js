@@ -5,6 +5,8 @@ import { fetchUserDetails } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
+import { useAppContext } from "../Context";
+import { formatDate, formatDateTime, convertDate } from "../helpers/functions";
 
 function Profile(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -13,6 +15,8 @@ function Profile(props) {
     const [errorMsg, setErrorMsg] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
     const [successMsg, setSuccessMsg] = useState("");
+
+    const { appState } = useAppContext();
 
     useEffect(() => {
         setIsLoading(true);
@@ -148,15 +152,42 @@ function Profile(props) {
                                                 </div>
                                                 <div className="form-group row">
                                                     <div className="col-sm-6">
+                                                        <label>Gender</label>
+                                                        <select ref={register} className="form-control" name="gender" defaultValue={!isLoading ? isData.data.gender : ''}>
+                                                            {/* <option value="">Doctor</option> */}
+                                                            <option value="male">Male</option>
+                                                            <option value="female">Female</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="col-sm-6">
                                                         <label>Address</label>
                                                         <textarea ref={register} className="form-control" name="address" defaultValue={!isLoading ? isData.data.address : ''}></textarea>
                                                     </div>
+                                                    {appState.user?.role === "patient" &&
+                                                        <div className="col-sm-6">
+                                                            <label>Allergies</label>
+                                                            <textarea ref={register} className="form-control" name="allergies" defaultValue={!isLoading ? isData.data.allergies : ''}></textarea>
+                                                        </div>
+                                                    }
                                                     <div className="col-sm-6">
                                                         <label>Description</label>
                                                         <textarea ref={register} className="form-control" name="description" defaultValue={!isLoading ? isData.data.description : ''}></textarea>
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
+                                                    {appState.user?.role === "doctor" ?
+                                                        <div className="col-sm-4">
+                                                            <label>License</label>
+                                                            <input ref={register} className="form-control" name="license_num" defaultValue={!isLoading ? isData.data.license_num : ''} />
+                                                        </div>
+                                                        :
+                                                        <div className="col-sm-4">
+                                                            <label>Date of Birth</label>
+                                                            <input ref={register({
+                                                                required: "This field is required",
+                                                            })} className="form-control" name="dob" type="date" defaultValue={!isLoading ? convertDate(isData.data.dob) : ''} min="" max="" />
+                                                        </div>
+                                                    }
                                                     <div className="col-sm-4">
                                                         <label>City</label>
                                                         <input ref={register} className="form-control" name="city" defaultValue={!isLoading ? isData.data.city : ''} />

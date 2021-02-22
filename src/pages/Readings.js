@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
 import {BASE_URL} from '../helpers/constants';
-import { convertDate } from '../helpers/functions';
+import { convertDate, calculateBMI } from '../helpers/functions';
 
 function Readings(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -84,9 +84,6 @@ function Readings(props) {
                                     <li className="breadcrumb-item active">Readings</li>
                                 </ul>
                             </div>
-                            <div className="col-auto float-right ml-auto">
-                                <Link to={'/readings_add'} className="btn add-btn"><i className="fa fa-plus"></i> Add New Readings</Link>
-                            </div>
                         </div>
                     </div>
                     {
@@ -125,7 +122,9 @@ function Readings(props) {
                                         <th>Blood Pressure</th>
                                         <th>Heart Rate</th>
                                         <th>Temperature</th>
-                                        <th>Actions</th>
+                                        <th>BMI</th>
+                                        <th>No. Drugs</th>
+                                        <th>Prescription</th>
                                     </tr>
                                 </thead>
                                 {
@@ -143,34 +142,9 @@ function Readings(props) {
                                                             <td>{data.blood_pressure}</td>
                                                             <td>{data.heart_rate}</td>
                                                             <td>{data.temperature}</td>
-                                                            <td className="text-right">
-                                                                <div className="dropdown dropdown-action">
-                                                                    <button
-                                                                        className="action-icon dropdown-toggle"
-                                                                        data-toggle="dropdown"
-                                                                        aria-expanded="false">
-                                                                        <i className="material-icons">more_vert</i>
-                                                                    </button>
-                                                                    <div className="btn dropdown-menu dropdown-menu-right" x-placement="bottom-end">
-                                                                        <Link
-                                                                            className="dropdown-item border-0 btn-transition btn passData"
-                                                                            to={'/readings_edit/' + data.id}
-                                                                            title="Edit">
-                                                                            <i className="fa fa-pencil"></i> Edit
-                                                                        </Link>
-                                                                        <button
-                                                                            className="btn dropdown-item border-0 btn-transition btn passData"
-                                                                            title="Delete"
-                                                                            onClick={() => {
-                                                                                if (window.confirm('Are you sure you want to delete this?')) {
-                                                                                    deletePatient(data.id)
-                                                                                };
-                                                                            }}>
-                                                                            <i className="fa fa-trash"></i> Delete
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
+                                                            <td>{calculateBMI(data.height, data.weight)}</td>
+                                                            <td>{data.prescribed}</td>
+                                                            <td>{data.prescription}</td>
                                                         </tr>
                                                     )
                                                 })

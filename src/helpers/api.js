@@ -63,10 +63,10 @@ export const fetchUniquePatientByToken = async () => {
 }
 
 //messages 
-export const fetchMessageData = async(id) => {
+export const fetchMessageData = async (id) => {
     const token = localStorage.getItem('token');
     let url;
-    if (typeof id === 'undefined'){
+    if (typeof id === 'undefined') {
         url = BASE_URL + '/chats';
     } else {
         url = BASE_URL + '/chats/' + id;
@@ -85,9 +85,9 @@ export const fetchMessageData = async(id) => {
     return { status, data };
 }
 //patient vitals
-export const fetchPatientReadings = async () => {
+export const fetchPatientReadings = async (role, id = null) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(BASE_URL + '/patients/readings/me', {
+    const res = await fetch(BASE_URL + (role === 'doctor' ? `/doctors/patients/${id}/readings` : '/patients/readings/me'), {
         method: "GET",
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -109,12 +109,7 @@ export const putPatientReadings = async (reading, id) => {
             'Content-Type': "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({
-            blood_pressure: reading.blood_pressure,
-            blood_sugar: reading.blood_sugar,
-            temperature: reading.temperature,
-            heart_rate: reading.heart_rate,
-        })
+        body: JSON.stringify(reading)
     });
     const status = res.status;
     const data = await res.json();
@@ -136,21 +131,16 @@ export const fetchUniquePatientReadings = async (id) => {
     return { status, data };
 }
 
-export const postPatientReadings = async (reading) => {
+export const postPatientReadings = async (id, reading) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(BASE_URL + '/patients/readings/me', {
+    const res = await fetch(BASE_URL + '/patients/readings/' + id, {
         method: "POST",
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({
-            blood_pressure: reading.blood_pressure,
-            blood_sugar: reading.blood_sugar,
-            temperature: reading.temperature,
-            heart_rate: reading.heart_rate,
-        })
+        body: JSON.stringify(reading)
     });
     const status = res.status;
     const data = await res.json();
@@ -174,7 +164,7 @@ export const postAppointment = async (appointment) => {
     return { status, data };
 }
 
-export const fetchDoctorList = async() => {
+export const fetchDoctorList = async () => {
     const token = localStorage.getItem('token');
     // console.log(BASE_URL + '/doctors' + (keyword ? `?search=${keyword}` : ''))
     const res = await fetch(BASE_URL + '/doctors', {
@@ -190,7 +180,7 @@ export const fetchDoctorList = async() => {
     return { status, data };
 }
 
-export const fetchAppointments = async() => {
+export const fetchAppointments = async () => {
     const token = localStorage.getItem('token');
     // console.log(BASE_URL + '/doctors' + (keyword ? `?search=${keyword}` : ''))
     const res = await fetch(BASE_URL + '/appointments/me', {
@@ -215,7 +205,7 @@ export const patchAppointment = async (id, state) => {
             'Content-Type': "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({id, status:state})
+        body: JSON.stringify({ id, status: state })
     });
     const status = res.status;
     const data = await res.json();
@@ -233,14 +223,14 @@ export const patchRequest = async (id, state) => {
             'Content-Type': "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify({id, status:state})
+        body: JSON.stringify({ id, status: state })
     });
     const status = res.status;
     const data = await res.json();
     return { status, data };
 }
 
-export const fetchRequests = async() => {
+export const fetchRequests = async () => {
     const token = localStorage.getItem('token');
     // console.log(BASE_URL + '/doctors' + (keyword ? `?search=${keyword}` : ''))
     const res = await fetch(BASE_URL + '/meds-refill/me', {
@@ -256,16 +246,16 @@ export const fetchRequests = async() => {
     return { status, data };
 }
 
-export const postRequest = async (medsrefill) => {
+export const postRequest = async (scanResults) => {
     const token = localStorage.getItem('token');
-    const res = await fetch(BASE_URL + '/meds-refill/me', {
+    const res = await fetch(BASE_URL + '/radiology', {
         method: "POST",
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': "application/json",
             'Accept': 'application/json',
         },
-        body: JSON.stringify(medsrefill)
+        body: JSON.stringify(scanResults)
     });
     const status = res.status;
     const data = await res.json();

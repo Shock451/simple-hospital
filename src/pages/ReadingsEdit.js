@@ -5,19 +5,21 @@ import { fetchUniquePatientReadings } from '../helpers/api';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
-import {putPatientReadings} from '../helpers/api';
+import { putPatientReadings } from '../helpers/api';
 
 function Readings(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [isData, setData] = useState([]);
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+
     const id = props.match.params.id;
+    const reading_id = props.match.params.reading_id;
 
     useEffect(() => {
         setIsLoading(true);
         async function fetchData() {
-            const { data } = await fetchUniquePatientReadings(id);
+            const { data } = await fetchUniquePatientReadings(reading_id);
             setData(data);
             setIsLoading(false);
         }
@@ -29,11 +31,11 @@ function Readings(props) {
 
     async function postSubmit(reading) {
         setIsLoading(true);
-        const { status, data } = await putPatientReadings(reading, id);
+        const { status, data } = await putPatientReadings(reading, reading_id);
 
         if (status) {
             props.history.push({
-                pathname: "/readings",
+                pathname: "/patient_details/" + id,
                 state: {
                     success: "Readings updated successfully"
                 }
@@ -70,7 +72,7 @@ function Readings(props) {
                                 </ul>
                             </div>
                             <div className="col-auto float-right ml-auto">
-                                <Link to={'/readings'} className="btn add-btn"><i className="fa fa-arrow-left"></i> Back to Readings</Link>
+                                <Link to={'/patient_details/' + id} className="btn add-btn"><i className="fa fa-arrow-left"></i> Back to Readings</Link>
                             </div>
                         </div>
                     </div>
@@ -141,6 +143,41 @@ function Readings(props) {
                                                 })} className="form-control" name="temperature" type="text" placeholder="Temperature" defaultValue={!isLoading ? isData.temperature : ''} />
                                                 {errors.temperature && <label className="error">{errors.temperature.message}</label>}
                                             </div>
+                                            <div className="col-md-4">
+                                                <label>Height <em>*</em></label>
+                                                <input ref={register({
+                                                    required: "This field is required",
+                                                })} className="form-control" name="height" type="text" placeholder="height" defaultValue={!isLoading ? isData.height : ''} />
+                                                {errors.height && <label className="error">{errors.height.message}</label>}
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label>Weight <em>*</em></label>
+                                                <input ref={register({
+                                                    required: "This field is required",
+                                                })} className="form-control" name="weight" type="text" placeholder="weight" defaultValue={!isLoading ? isData.weight : ''} />
+                                                {errors.weight && <label className="error">{errors.weight.message}</label>}
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
+                                            <div className="col-md-8">
+                                                <label>Prescription <em>*</em></label>
+                                                <textarea ref={register({
+                                                    required: "This field is required",
+                                                })} className="form-control" name="prescription" defaultValue={isData.prescription ?? ''}>
+                                                </textarea>
+                                                {errors.prescription && <label className="error">{errors.prescription.message}</label>}
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label>No. Drugs prescribed</label>
+                                                <input ref={register({
+                                                    required: "This field is required",
+                                                    pattern: {
+                                                        value: /^[0-9]*$/i,
+                                                        message: "Please enter valid number"
+                                                    },
+                                                })} className="form-control" name="prescribed" type="text" placeholder="0" defaultValue={isData.prescribed ?? ''} />
+                                                {errors.prescribed && <label className="error">{errors.prescribed.message}</label>}
+                                            </div>
                                         </div>
                                         <div className="form-actions text-right">
                                             <button type="submit" className="btn btn-danger">Update</button>
@@ -151,8 +188,8 @@ function Readings(props) {
                         </div>
                     </div>
                 </div>
-            </div >
-        </div >
+            </div>
+        </div>
     )
 }
 

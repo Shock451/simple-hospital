@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Redirect, Route } from "react-router-dom";
 import PrivateRoute from './components/PrivateRoute';
 import Home from './pages/Home';
 import Login from "./pages/Login";
@@ -15,14 +15,15 @@ import ReadingsAdd from "./pages/ReadingsAdd";
 import ReadingsEdit from "./pages/ReadingsEdit";
 import PatientMessageList from "./pages/PatientMessageList";
 import PatientMessage from "./pages/PatientMessage";
-import MedsRefill from "./pages/MedsRefill";
+// import MedsRefill from "./pages/MedsRefill";
 import ScheduleAppointment from "./pages/ScheduleAppointment.js";
 import { fetchUserDetails } from './helpers/api';
 import Appointments from './pages/Appointments';
+import RadiologyForm from './pages/RadiologyForm';
 
 import { AppContext } from "./Context";
 import Loader from './components/Loader';
-import MedsRefillRequest from "./pages/MedsRefillRequest";
+// import MedsRefillRequest from "./pages/MedsRefillRequest";
 
 function App(props) {
     const [authToken, setAuthToken] = useState(localStorage.getItem("token") || "");
@@ -42,9 +43,8 @@ function App(props) {
             setLoading(false);
         }
         if (authToken) {
-            console.log("We are in App and fetching");
             fetchData();
-        } else{
+        } else {
             setLoading(false);
         }
     }, [authToken]);
@@ -61,24 +61,35 @@ function App(props) {
             setAppState
         }}>
             <Router>
-                <PrivateRoute exact path="/" component={Home} />
-                <PrivateRoute path="/profile" component={Profile} />
-                <PrivateRoute path="/patient_list" component={PatientList} />
-                <PrivateRoute path="/patient_details/:id" component={PatientDetails} />
-                <PrivateRoute path="/doctor_message/:id" component={DoctorMessage} />
-                <PrivateRoute path="/doctor_message_list" component={DoctorMessageList} />
-                <PrivateRoute path="/readings" component={Readings} />
-                <PrivateRoute path="/readings_add" component={ReadingsAdd} />
-                <PrivateRoute path="/readings_edit/:id" component={ReadingsEdit} />
-                <PrivateRoute path="/patient_message_list" component={PatientMessageList} />
-                <PrivateRoute path="/patient_message/:id" component={PatientMessage} />
-                <PrivateRoute path="/schedule_appointment" component={ScheduleAppointment} />
-                <PrivateRoute path="/appointments" component={Appointments} />
-                <PrivateRoute path="/medsrefillrequest" component={MedsRefillRequest} />
-                <PrivateRoute path="/meds-refill" component={MedsRefill} />
-                <Route path="/login" component={Login} />
-                <Route path="/register" component={Register} />
-                <Route path="/forgotpassword" component={ForgotPassword} />
+                <Switch>
+                    <PrivateRoute exact path="/" component={Home} />
+                    <PrivateRoute path="/profile" component={Profile} />
+                    
+                    <PrivateRoute role="radiologist" path="/radiology" component={RadiologyForm} />
+                    
+                    <PrivateRoute role="doctor" path="/patient_list" component={PatientList} />
+                    
+                    <PrivateRoute role="doctor" path="/patient_details/:id" component={PatientDetails} />
+                    
+                    <PrivateRoute role="doctor" path="/doctor_message/:id" component={DoctorMessage} />
+                    <PrivateRoute role="doctor" path="/doctor_message_list" component={DoctorMessageList} />
+                    
+                    <PrivateRoute role="patient" path="/readings" component={Readings} />
+                    <PrivateRoute role="doctor" path="/readings_add/:id" component={ReadingsAdd} />
+                    <PrivateRoute role="doctor" path="/readings_edit/:id/:reading_id" component={ReadingsEdit} />
+                    <PrivateRoute role="patient" path="/patient_message_list" component={PatientMessageList} />
+                    <PrivateRoute role="patient" path="/patient_message/:id" component={PatientMessage} />
+                    <PrivateRoute path="/schedule_appointment" component={ScheduleAppointment} />
+                    <PrivateRoute path="/appointments" component={Appointments} />
+                    
+                    {/* <PrivateRoute path="/medsrefillrequest" component={MedsRefillRequest} /> */}
+                    
+                    <Route path="/login" component={Login} />
+                    <Route path="/register" component={Register} />
+                    <Route path="/forgotpassword" component={ForgotPassword} />
+
+                    <Redirect to="/" />
+                </Switch>
             </Router>
         </AppContext.Provider>);
 }

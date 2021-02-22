@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 import { getDoctors, getDoctor } from "../models/doctor.js";
 import { getUsersById } from './../models/user';
+import { getReadingsByPatient } from '../models/patient';
 
 export default {
 
@@ -55,6 +56,21 @@ export default {
         const [patientDetails] = await getUsersById(recipient_id);
 
         res.status(200).json({ patientChat, patientDetails });
-    }
+    },
+
+    getReadingsByPatientId: async (req, res) => {
+        const id = req.params.id;
+
+        let patient = await getReadingsByPatient(id);
+
+        if (!patient) {
+            res.status(404).json({
+                err: "No readings found",
+            });
+            return;
+        }
+
+        res.status(200).json(patient);
+    },
 
 }

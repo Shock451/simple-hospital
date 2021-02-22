@@ -13,13 +13,12 @@ function Home(props) {
     const [isChartData, setChartData] = useState([]);
     const { appState } = useAppContext();
 
-    console.log("We are in home");
     useEffect(() => {
         if (!appState) return;
         
         async function fetchData() {
             setIsLoading(true);
-            const { status, data } = await fetchPatientReadings();
+            const { status, data } = await fetchPatientReadings("patient");
             if (status === 200) {
                 let newChartData = createChartData(data);
                 setChartData(newChartData);
@@ -28,16 +27,17 @@ function Home(props) {
         }
 
         if (appState.user.role === 'patient') {
-            console.log("We shall fetch");
             fetchData();
         }
     }, [appState]);
 
     if (!isLoading && appState) {
         if (appState.user.role === 'doctor') {
-            console.log("We shall redirect");
             return <Redirect to={'/patient_list'} />;
+        } else if (appState.user.role === 'radiologist') {
+            return <Redirect to={'/radiology'} />;
         }
+
     }
 
     return (

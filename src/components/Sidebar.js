@@ -27,9 +27,9 @@ function Sidebar(props) {
                                 <Link to={'/appointments'}><i className="fa fa-calendar"></i> <span>Appointments</span></Link>
                             </li>
                             <p></p>
-                            <li className={props.data.location.pathname === '/meds-refill' ? 'active' : props.data.match.path === '/medsrefillrequest' ? 'active' : ''}>
+                            {/* <li className={props.data.location.pathname === '/meds-refill' ? 'active' : props.data.match.path === '/medsrefillrequest' ? 'active' : ''}>
                                 <Link to={'/meds-refill'}><i className="fa fa-medkit"></i> <span>Request Meds Refill</span></Link>
-                            </li>
+                            </li> */}
                         </ul>
                         :
                         null
@@ -49,9 +49,24 @@ function Sidebar(props) {
                                 <Link to={'/appointments'}><i className="fa fa-calendar"></i> <span>Appointments</span></Link>
                             </li>
                             <p></p>
-                            <li className={props.data.location.pathname === '/meds-refill' ? 'active' : props.data.match.path === '/medsrefillrequest' ? 'active' : ''}>
+                            {/* <li className={props.data.location.pathname === '/meds-refill' ? 'active' : props.data.match.path === '/medsrefillrequest' ? 'active' : ''}>
                                 <Link to={'/meds-refill'}><i className="fa fa-medkit"></i> <span>Meds Refill Requests</span></Link>
+                            </li> */}
+                        </ul>
+                        :
+                        null
+                    }
+
+                    {appState?.user.role === 'radiologist' ?
+                        <ul>
+                            <li className={props.data.location.pathname === '/radiology' ? 'active' : ''}>
+                                <Link to={'/radiology'}><i className="fa fa-dashboard"></i> <span>All scans</span></Link>
                             </li>
+                            <p></p>
+                            <li className={props.data.location.pathname === '/radiology' ? 'active' : ''}>
+                                <Link to={'/radiology'}><i className="fa fa-plus"></i> <span>Upload Radiology Results</span></Link>
+                            </li>
+                            <p></p>
                         </ul>
                         :
                         null

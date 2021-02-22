@@ -24,9 +24,9 @@ export const getReadingsByPatient = (id, days = 30) => {
     return doQueryParams(query, [id]);
 }
 
-export const getReadingByPatient = (id, patient_id) => {
-    let query = `SELECT * FROM patient_readings WHERE patient_id = ? AND id = ?`;
-    return doQueryParams(query, [patient_id, id]);
+export const getReadingByPatient = (id) => {
+    let query = `SELECT * FROM patient_readings WHERE id = ?`;
+    return doQueryParams(query, [id]);
 }
 
 export const addReadingsById = async (data) => {
@@ -38,18 +38,18 @@ export const addReadingsById = async (data) => {
     return false;
 }
 
-export const updateReadingsById = async (reading_id, user_id, data) => {
-    let query = `UPDATE patient_readings SET ? WHERE patient_id = ? AND id = ?`;
-    const response = await doQueryParams(query, [data, user_id, reading_id]);
+export const updateReadingsById = async (reading_id, data) => {
+    let query = `UPDATE patient_readings SET ? WHERE id = ?`;
+    const response = await doQueryParams(query, [data, reading_id]);
     if (response.affectedRows === 1) {
         return true;
     }
     return false;
 }
 
-export const deleteReadingsById = async (user_id, reading_id) => {
-    let query = "DELETE FROM patient_readings WHERE patient_id = ? AND id = ?";
-    const response = await doQueryParams(query, [user_id, reading_id]);
+export const deleteReadingsById = async (reading_id) => {
+    let query = "DELETE FROM patient_readings WHERE id = ?";
+    const response = await doQueryParams(query, [reading_id]);
     if (response.affectedRows === 1) {
         return true
     }

@@ -3,7 +3,9 @@ import { doQueryParams } from "../setup/db.js";
 
 
 export const getProfile = async (id, role) => {
-    let query = `SELECT address, city, state, description FROM ${role}s WHERE user_id = ?`;
+    // let roleSpecificFields = role === ROLES[0] ? 'dob, alergies'  : 'license_num';
+    // let query = `SELECT address, city, state, description, gender, ${roleSpecificFields} FROM ${role}s WHERE user_id = ?`;
+    let query = `SELECT * FROM ${role}s WHERE user_id = ?`;
     return doQueryParams(query, [id]);
 }
 

@@ -7,6 +7,8 @@ const router = Router();
 
 router.get('/', AuthMiddlewares.authorize, DoctorsController.getAllDoctors);
 
+router.get("/patients/:id/readings", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, DoctorsController.getReadingsByPatientId);
+
 router.get("/me", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, DoctorsController.getDoctorById);
 
 export default router;
