@@ -6,6 +6,9 @@ import {
     getPatient,
     getPatientProfile,
 
+    getPatientScanReport,
+    getPatientScanReports,
+
     getReadingsByPatient,
     getReadingByPatient,
     addReadingsById,
@@ -82,6 +85,42 @@ export default {
         }
 
         res.status(200).json(patient);
+    },
+
+    getScanReports: async (req, res) => {
+        const id = req._id;
+        let reports = await getPatientScanReports(id);
+
+        if (!reports) {
+            res.status(404).json({
+                err: "No reports found",
+            });
+            return;
+        }
+
+        reports = reports.map(report => {
+            report['image_uri'] = `${req.protocol}://${req.get('host')}/static/scans/${report['image_uri']}`
+            return report;
+        })
+
+        res.status(200).json(reports);
+    },
+
+    getScanReport: async (req, res) => {
+        const patient_id = req._id;
+        const report_id = req.params.id;
+        let [report] = await getPatientScanReport(report_id, patient_id);
+
+        if (!report) {
+            res.status(404).json({
+                err: "Report not found",
+            });
+            return;
+        }
+
+        report['image_uri'] = `${req.protocol}://${req.get('host')}/static/scans/${report['image_uri']}`;
+
+        res.status(200).json(report);
     },
 
     getReadingByPatientId: async (req, res) => {

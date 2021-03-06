@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchUniquePatient, fetchPatientReadings } from '../helpers/api';
+import { fetchUniquePatient, fetchPatientReadings, fetchPatientScanReports } from '../helpers/api';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Loader from '../components/Loader';
@@ -12,6 +12,7 @@ function PatientDetails(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [isData, setData] = useState([]);
     const [isChartData, setChartData] = useState();
+    const [reports, setReports] = useState([]);
 
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
@@ -22,11 +23,15 @@ function PatientDetails(props) {
         async function fetchData() {
             setIsLoading(true);
             const { data } = await fetchUniquePatient(id);
+            const { data: reportData } = await fetchPatientScanReports(id);
             setData(data);
+            setReports(reportData);
             setChartData(createChartData(data.readings))
             setIsLoading(false);
         }
+
         fetchData();
+
     }, []);
 
     function deletePatient(reading_id) {
@@ -273,6 +278,44 @@ function PatientDetails(props) {
                                     }
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div className="row mb-5">
+                        <div className="col-md-12">
+                            <table className="table table-striped custom-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Description</th>
+                                        <th>Image</th>
+                                    </tr>
+                                </thead>
+                                {
+
+                                    !isLoading
+                                        ?
+                                        <tbody>
+                                            {
+                                                reports.map(function (data, index) {
+                                                    return (
+                                                        <tr key={data.id}>
+                                                            <td>{index + 1}</td>
+                                                            <td>{data.report}</td>
+                                                            <td>
+                                                                <a target="_blank" href={`${data.image_uri}`}>
+                                                                    View Image
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                        :
+                                        null
+                                }
+                            </table>
                         </div>
                     </div>
                 </div>

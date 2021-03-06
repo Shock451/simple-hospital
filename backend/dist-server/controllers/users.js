@@ -1,8 +1,9 @@
-"use strict";Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
+"use strict";Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
 var _user2 = require("../models/user.js");
-var _constants = require("../helpers/constants");function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
+var _constants = require("../helpers/constants");function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;}function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var _default =
 
 {
 
@@ -28,31 +29,38 @@ var _constants = require("../helpers/constants");function _interopRequireDefault
 
 
 
-              res.status(200).json({
+              res.status(200).json(_objectSpread({
                 email: user.email,
                 mobile: user.mobile,
                 name: user.name,
-                role: user.role,
-                address: userDetails.address,
-                city: userDetails.city,
-                state: userDetails.state,
-                description: userDetails.description });case 19:case "end":return _context.stop();}}}, _callee);}));function getUserProfile(_x, _x2) {return _getUserProfile.apply(this, arguments);}return getUserProfile;}(),
+                role: user.role },
+              userDetails));case 19:case "end":return _context.stop();}}}, _callee);}));function getUserProfile(_x, _x2) {return _getUserProfile.apply(this, arguments);}return getUserProfile;}(),
 
 
 
-  updateUserProfile: function () {var _updateUserProfile = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, res) {var user_id, role, _req$body, address, description, city, state, email, name, mobile, old_password, password, password2, data, _yield$getUsersByEmai, _yield$getUsersByEmai2, user, hashedPassword, _yield$getUsersById3, _yield$getUsersById4, _user, validPassword, updated;return regeneratorRuntime.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:
+  updateUserProfile: function () {var _updateUserProfile = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, res) {var user_id, role, _req$body, address, gender, description, city, state, email, name, mobile, old_password, password, password2, data, _yield$getUsersByEmai, _yield$getUsersByEmai2, user, hashedPassword, _yield$getUsersById3, _yield$getUsersById4, _user, validPassword, updated;return regeneratorRuntime.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:
               user_id = req._id;
               role = req._role;_req$body =
-              req.body, address = _req$body.address, description = _req$body.description, city = _req$body.city, state = _req$body.state, email = _req$body.email, name = _req$body.name, mobile = _req$body.mobile, old_password = _req$body.old_password, password = _req$body.password, password2 = _req$body.password2;
 
-              data = {
+              req.body, address = _req$body.address, gender = _req$body.gender, description = _req$body.description, city = _req$body.city, state = _req$body.state, email = _req$body.email, name = _req$body.name, mobile = _req$body.mobile, old_password = _req$body.old_password, password = _req$body.password, password2 = _req$body.password2;
+
+              data = _objectSpread({
                 address: address,
                 description: description,
+                gender: gender,
                 city: city,
                 state: state,
                 email: email,
                 name: name,
-                mobile: mobile };if (!
+                mobile: mobile },
+              role === _constants.ROLES[0] ?
+              {
+                allergies: req.body.allergies,
+                dob: req.body.dob } :
+
+              {
+                license_num: req.body.license_num });if (!
+
 
 
               email) {_context2.next = 13;break;}_context2.next = 7;return (

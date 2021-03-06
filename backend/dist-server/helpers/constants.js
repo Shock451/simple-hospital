@@ -1,3 +1,3 @@
-"use strict";Object.defineProperty(exports, "__esModule", { value: true });exports.REQUEST_STATES = exports.APPOINTMENT_STATES = exports.ROLES = void 0;var ROLES = ["patient", "doctor"];exports.ROLES = ROLES;
+"use strict";Object.defineProperty(exports, "__esModule", { value: true });exports.REQUEST_STATES = exports.APPOINTMENT_STATES = exports.ROLES = void 0;var ROLES = ["patient", "doctor", "radiologist"];exports.ROLES = ROLES;
 var APPOINTMENT_STATES = ["approved", "pending", "rejected"];exports.APPOINTMENT_STATES = APPOINTMENT_STATES;
 var REQUEST_STATES = ["approved", "pending", "rejected"];exports.REQUEST_STATES = REQUEST_STATES;

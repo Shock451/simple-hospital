@@ -32,4 +32,12 @@ APP_SECRET = process.env.APP_SECRET;var _default =
     } else {
       next();
     }
+  },
+  only_doctors_or_radiologists: function only_doctors_or_radiologists(req, res, next) {
+    var role = req._role;
+    if (role === _constants.ROLES[0]) {// ROLES[0] is doctorr
+      res.status(400).json({ err: "Authorized doctors or radiologists only." });
+    } else {
+      next();
+    }
   } };exports.default = _default;

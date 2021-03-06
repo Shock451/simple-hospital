@@ -50,7 +50,8 @@
     "read-excel-file": "^4.0.6",
     "rimraf": "^3.0.2",
     "swagger-jsdoc": "^4.0.0",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.4",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

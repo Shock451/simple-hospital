@@ -11,4 +11,7 @@ router.get("/patients/:id/readings", AuthMiddlewares.authorize, AuthMiddlewares.
 
 router.get("/me", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, DoctorsController.getDoctorById);
 
+router.get('/scans/:id', AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, DoctorsController.getScanReports);
+router.get('/scans/:patient/:report', AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, DoctorsController.getScanReport);
+
 export default router;

@@ -8,17 +8,21 @@ router.get("/me", _auth.default.authorize, _auth.default.only_patients, _patient
 
 router.get("/readings/me", _auth.default.authorize, _auth.default.only_patients, _patients.default.getReadingsByPatientId);
 
-router.post("/readings/me", _auth.default.authorize, _auth.default.only_patients, _patients.default.postReadingsByPatientId);
+router.post("/readings/:id", _auth.default.authorize, _auth.default.only_doctors, _patients.default.postReadingsByPatientId);
 
-router.get("/readings/:id", _auth.default.authorize, _auth.default.only_patients, _patients.default.getReadingByPatientId);
+router.get("/readings/:id", _auth.default.authorize, _auth.default.only_doctors, _patients.default.getReadingByPatientId);
 
-router.put("/readings/:id", _auth.default.authorize, _auth.default.only_patients, _patients.default.updateReadingByPatientId);
+router.put("/readings/:id", _auth.default.authorize, _auth.default.only_doctors, _patients.default.updateReadingByPatientId);
 
-router.delete("/readings/:id", _auth.default.authorize, _auth.default.only_patients, _patients.default.deleteReadingsByPatientId);
+router.delete("/readings/:id", _auth.default.authorize, _auth.default.only_doctors, _patients.default.deleteReadingsByPatientId);
 
-router.get("/:search?", _auth.default.authorize, _auth.default.only_doctors, _patients.default.getAllPatients);
+router.get("/:search?", _auth.default.authorize, _auth.default.only_doctors_or_radiologists, _patients.default.getAllPatients);
 
 router.get("/:id/complete", _auth.default.authorize, _auth.default.only_doctors, _patients.default.getPatientProfile);
+
+router.get('/scans', _auth.default.authorize, _auth.default.only_patients, _patients.default.getScanReports);
+router.get('/scans/:id', _auth.default.authorize, _auth.default.only_patients, _patients.default.getScanReport);
+
 // router.post("/messages/:id", AuthMiddlewares.authorize, AuthMiddlewares.only_patients, PatientController.getContactList);
 
 // router.get('/readings/me', AuthMiddlewares.authorize, PatientController.getReadings);

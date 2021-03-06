@@ -27,9 +27,9 @@ function Sidebar(props) {
                                 <Link to={'/appointments'}><i className="fa fa-calendar"></i> <span>Appointments</span></Link>
                             </li>
                             <p></p>
-                            {/* <li className={props.data.location.pathname === '/meds-refill' ? 'active' : props.data.match.path === '/medsrefillrequest' ? 'active' : ''}>
-                                <Link to={'/meds-refill'}><i className="fa fa-medkit"></i> <span>Request Meds Refill</span></Link>
-                            </li> */}
+                            <li className={props.data.location.pathname === '/scans' ? 'active' : props.data.match.path === '/scans' ? 'active' : ''}>
+                                <Link to={'/scans'}><i className="fa fa-medkit"></i> <span>Scan Reports</span></Link>
+                            </li>
                         </ul>
                         :
                         null
@@ -49,8 +49,8 @@ function Sidebar(props) {
                                 <Link to={'/appointments'}><i className="fa fa-calendar"></i> <span>Appointments</span></Link>
                             </li>
                             <p></p>
-                            {/* <li className={props.data.location.pathname === '/meds-refill' ? 'active' : props.data.match.path === '/medsrefillrequest' ? 'active' : ''}>
-                                <Link to={'/meds-refill'}><i className="fa fa-medkit"></i> <span>Meds Refill Requests</span></Link>
+                            {/* <li className={props.data.location.pathname === '/scans' ? 'active' : props.data.match.path === '/scans' ? 'active' : ''}>
+                                <Link to={'/scans'}><i className="fa fa-medkit"></i> <span>Scan Reports</span></Link>
                             </li> */}
                         </ul>
                         :

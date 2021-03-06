@@ -16,9 +16,15 @@ router.put("/readings/:id", AuthMiddlewares.authorize, AuthMiddlewares.only_doct
 
 router.delete("/readings/:id", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, PatientController.deleteReadingsByPatientId);
 
+router.get('/scans', AuthMiddlewares.authorize, AuthMiddlewares.only_patients, PatientController.getScanReports);
+
+router.get('/scans/:id', AuthMiddlewares.authorize, AuthMiddlewares.only_patients, PatientController.getScanReport);
+
 router.get("/:search?", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors_or_radiologists, PatientController.getAllPatients);
 
 router.get("/:id/complete", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, PatientController.getPatientProfile);
+
+
 // router.post("/messages/:id", AuthMiddlewares.authorize, AuthMiddlewares.only_patients, PatientController.getContactList);
 
 // router.get('/readings/me', AuthMiddlewares.authorize, PatientController.getReadings);

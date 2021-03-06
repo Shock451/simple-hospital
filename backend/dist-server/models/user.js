@@ -3,7 +3,9 @@
 
 
 var getProfile = /*#__PURE__*/function () {var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(id, role) {var query;return regeneratorRuntime.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
-            query = "SELECT address, city, state, description FROM ".concat(role, "s WHERE user_id = ?");return _context.abrupt("return",
+            // let roleSpecificFields = role === ROLES[0] ? 'dob, alergies'  : 'license_num';
+            // let query = `SELECT address, city, state, description, gender, ${roleSpecificFields} FROM ${role}s WHERE user_id = ?`;
+            query = "SELECT * FROM ".concat(role, "s WHERE user_id = ?");return _context.abrupt("return",
             (0, _db.doQueryParams)(query, [id]));case 2:case "end":return _context.stop();}}}, _callee);}));return function getProfile(_x, _x2) {return _ref.apply(this, arguments);};}();exports.getProfile = getProfile;
 
 

@@ -32,6 +32,36 @@ export const fetchPatientList = async (keyword) => {
     return { status, data };
 }
 
+export const fetchMyScanReports = async () => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/patients/scans', {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+            'Accept': 'application/json',
+        }
+    });
+    const status = res.status;
+    const data = await res.json();
+    return { status, data };
+}
+
+export const fetchPatientScanReports = async (patient_id) => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/doctors/scans/' + patient_id, {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+            'Accept': 'application/json',
+        }
+    });
+    const status = res.status;
+    const data = await res.json();
+    return { status, data };
+}
+
 export const fetchUniquePatient = async (id) => {
     const token = localStorage.getItem('token');
     const res = await fetch(BASE_URL + '/patients/' + id + '/complete', {
@@ -246,16 +276,22 @@ export const fetchRequests = async () => {
     return { status, data };
 }
 
-export const postRequest = async (scanResults) => {
+export const postRequest = async (report) => {
+    const formData = new FormData();
+
+    // console.log(report)
+    formData.append("file", report["file"][0], "scan");
+    formData.append("patient_id", report["patient_id"]);
+    formData.append("description", report["description"]);
+
     const token = localStorage.getItem('token');
-    const res = await fetch(BASE_URL + '/radiology', {
+    console.log("We are here")
+    const res = await fetch(BASE_URL + '/radiology/upload', {
         method: "POST",
         headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': "application/json",
-            'Accept': 'application/json',
         },
-        body: JSON.stringify(scanResults)
+        body: formData,
     });
     const status = res.status;
     const data = await res.json();

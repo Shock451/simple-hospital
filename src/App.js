@@ -19,6 +19,7 @@ import PatientMessage from "./pages/PatientMessage";
 import ScheduleAppointment from "./pages/ScheduleAppointment.js";
 import { fetchUserDetails } from './helpers/api';
 import Appointments from './pages/Appointments';
+import ScanReports from './pages/ScanReports';
 import RadiologyForm from './pages/RadiologyForm';
 
 import { AppContext } from "./Context";
@@ -81,6 +82,7 @@ function App(props) {
                     <PrivateRoute role="patient" path="/patient_message/:id" component={PatientMessage} />
                     <PrivateRoute path="/schedule_appointment" component={ScheduleAppointment} />
                     <PrivateRoute path="/appointments" component={Appointments} />
+                    <PrivateRoute path="/scans" component={ScanReports} />
                     
                     {/* <PrivateRoute path="/medsrefillrequest" component={MedsRefillRequest} /> */}
                     

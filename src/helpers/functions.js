@@ -1,4 +1,7 @@
 export function convertDate(mysldate, format = true) {
+    if (typeof mysldate === "undefined" || !mysldate)
+        return;
+        
     var dateParts = mysldate.split("-");
     var date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0, 2));
     // return date.getDate() + "-" + (date.getMonth() + 1);
@@ -20,7 +23,7 @@ export function formatDate(date) {
 }
 
 export function capitalize(str) {
-    return str[0].toUpperCase() + str.substring(1); 
+    return str[0].toUpperCase() + str.substring(1);
 }
 
 export function formatTime(date) {
@@ -90,6 +93,6 @@ export function createChartData(data) {
     return { labels, datasets }
 }
 
-export function calculateBMI(height, weight){
+export function calculateBMI(height, weight) {
     return (weight / (height * height)).toFixed(2);
 }

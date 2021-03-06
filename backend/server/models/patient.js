@@ -9,6 +9,16 @@ export const getPatients = async (search) => {
     return doQueryParams(query);
 }
 
+export const getPatientScanReports = async (patient_id) => {
+    let query = `SELECT * FROM radiology_scans WHERE patient_id=${patient_id}`;
+    return doQueryParams(query);
+}
+
+export const getPatientScanReport = async (id, patient_id) => {
+    let query = `SELECT * FROM radiology_scans WHERE patient_id=${patient_id} AND id=${id}`;
+    return doQueryParams(query);
+}
+
 export const getPatient = async (id) => {
     let query = `SELECT * FROM users WHERE id = ? AND role = 'patient'`;
     return doQueryParams(query, [id]);

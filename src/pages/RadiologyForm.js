@@ -77,7 +77,7 @@ function RadiologyForm(props) {
                     <div className="row">
                         <div className="col-lg-12">
                             <div className="card">
-                                <form onSubmit={handleSubmit(postSubmit)}>
+                                <form onSubmit={handleSubmit(postSubmit)} enctype="multipart/form-data">
                                     {
                                         isError
                                             ?
@@ -92,7 +92,7 @@ function RadiologyForm(props) {
                                     <div className="col-md-12 mt-3">
                                         <label> Patient <em>*</em></label>
                                         <select className="form-control" name="patient_id" ref={register({ required: true })}>
-                                            <option value="">Select a doctor</option>
+                                            <option value="">Select a patient</option>
                                             {patientList && patientList.map(patient => (
                                                 <option key={`doctor-${patient.id}`} value={patient.id}>{patient.name}</option> //doctor.id gets passed to the api since it is the value and doctor.name is displayed in the drop down list
                                             ))}
@@ -117,16 +117,16 @@ function RadiologyForm(props) {
                                                     required: "This field is required",
                                                     maxLength: 1000
 
-                                                })} className="form-control" name="image" type="file" />
-                                                {errors.image && <label className="error">{errors.image.message}</label>}
+                                                })} className="form-control" name="file" type="file" />
+                                                {errors.file && <label className="error">{errors.file.message}</label>}
 
                                             </div>
-                                            <div className="col-md-12 mt-3">
+                                            {/* <div className="col-md-12 mt-3">
                                                 <label>Date and Time<em>*</em></label>
                                                 <input ref={register({
                                                 })} className="form-control" name="date" type="datetime-local" />
                                                 {errors.date && <label className="error">{errors.date.message}</label>}
-                                            </div>
+                                            </div> */}
                                         </div>
                                         <div className="form-actions text-right">
                                             <button type="submit" className="btn btn-danger">Submit</button>
