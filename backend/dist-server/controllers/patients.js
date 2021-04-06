@@ -98,7 +98,12 @@ var _patient = require("../models/patient.js");function _interopRequireDefault(o
 
 
 
-              res.status(200).json(reports);case 8:case "end":return _context5.stop();}}}, _callee5);}));function getScanReports(_x9, _x10) {return _getScanReports.apply(this, arguments);}return getScanReports;}(),
+              reports = reports.map(function (report) {
+                report['image_uri'] = "".concat(req.protocol, "://").concat(req.get('host'), "/static/scans/").concat(report['image_uri']);
+                return report;
+              });
+
+              res.status(200).json(reports);case 9:case "end":return _context5.stop();}}}, _callee5);}));function getScanReports(_x9, _x10) {return _getScanReports.apply(this, arguments);}return getScanReports;}(),
 
 
   getScanReport: function () {var _getScanReport = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res) {var patient_id, report_id, _yield$getPatientScan, _yield$getPatientScan2, report;return regeneratorRuntime.wrap(function _callee6$(_context6) {while (1) {switch (_context6.prev = _context6.next) {case 0:
@@ -113,7 +118,9 @@ var _patient = require("../models/patient.js");function _interopRequireDefault(o
 
 
 
-              res.status(200).json(report);case 11:case "end":return _context6.stop();}}}, _callee6);}));function getScanReport(_x11, _x12) {return _getScanReport.apply(this, arguments);}return getScanReport;}(),
+              report['image_uri'] = "".concat(req.protocol, "://").concat(req.get('host'), "/static/scans/").concat(report['image_uri']);
+
+              res.status(200).json(report);case 12:case "end":return _context6.stop();}}}, _callee6);}));function getScanReport(_x11, _x12) {return _getScanReport.apply(this, arguments);}return getScanReport;}(),
 
 
   getReadingByPatientId: function () {var _getReadingByPatientId = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {var id, _yield$getReadingByPa, _yield$getReadingByPa2, record;return regeneratorRuntime.wrap(function _callee7$(_context7) {while (1) {switch (_context7.prev = _context7.next) {case 0:

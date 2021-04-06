@@ -88,7 +88,12 @@ var _patient = require("../models/patient");function _interopRequireDefault(obj)
 
 
 
-              res.status(200).json(reports);case 8:case "end":return _context6.stop();}}}, _callee6);}));function getScanReports(_x11, _x12) {return _getScanReports.apply(this, arguments);}return getScanReports;}(),
+              reports = reports.map(function (report) {
+                report['image_uri'] = "".concat(req.protocol, "://").concat(req.get('host'), "/static/scans/").concat(report['image_uri']);
+                return report;
+              });
+
+              res.status(200).json(reports);case 9:case "end":return _context6.stop();}}}, _callee6);}));function getScanReports(_x11, _x12) {return _getScanReports.apply(this, arguments);}return getScanReports;}(),
 
 
   getScanReport: function () {var _getScanReport = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {var patient_id, report_id, _yield$getPatientScan, _yield$getPatientScan2, report;return regeneratorRuntime.wrap(function _callee7$(_context7) {while (1) {switch (_context7.prev = _context7.next) {case 0:
@@ -103,4 +108,6 @@ var _patient = require("../models/patient");function _interopRequireDefault(obj)
 
 
 
-              res.status(200).json(report);case 11:case "end":return _context7.stop();}}}, _callee7);}));function getScanReport(_x13, _x14) {return _getScanReport.apply(this, arguments);}return getScanReport;}() };exports.default = _default;
+              report['image_uri'] = "".concat(req.protocol, "://").concat(req.get('host'), "/static/scans/").concat(report['image_uri']);
+
+              res.status(200).json(report);case 12:case "end":return _context7.stop();}}}, _callee7);}));function getScanReport(_x13, _x14) {return _getScanReport.apply(this, arguments);}return getScanReport;}() };exports.default = _default;

@@ -16,12 +16,14 @@ router.put("/readings/:id", _auth.default.authorize, _auth.default.only_doctors,
 
 router.delete("/readings/:id", _auth.default.authorize, _auth.default.only_doctors, _patients.default.deleteReadingsByPatientId);
 
+router.get('/scans', _auth.default.authorize, _auth.default.only_patients, _patients.default.getScanReports);
+
+router.get('/scans/:id', _auth.default.authorize, _auth.default.only_patients, _patients.default.getScanReport);
+
 router.get("/:search?", _auth.default.authorize, _auth.default.only_doctors_or_radiologists, _patients.default.getAllPatients);
 
 router.get("/:id/complete", _auth.default.authorize, _auth.default.only_doctors, _patients.default.getPatientProfile);
 
-router.get('/scans', _auth.default.authorize, _auth.default.only_patients, _patients.default.getScanReports);
-router.get('/scans/:id', _auth.default.authorize, _auth.default.only_patients, _patients.default.getScanReport);
 
 // router.post("/messages/:id", AuthMiddlewares.authorize, AuthMiddlewares.only_patients, PatientController.getContactList);
 

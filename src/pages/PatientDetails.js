@@ -195,11 +195,11 @@ function PatientDetails(props) {
                                     <tr>
                                         <th>#</th>
                                         <th>Date</th>
-                                        <th>Blood Sugar</th>
-                                        <th>Blood Pressure</th>
-                                        <th>Heart Rate</th>
-                                        <th>Temperature</th>
-                                        <th>BMI</th>
+                                        <th>Blood Sugar(mg/dL)</th>
+                                        <th>Blood Pressure(mmHg)</th>
+                                        <th>Heart Rate(BPM)</th>
+                                        <th>Temperature(C)</th>
+                                        <th>BMI(kg/m2)</th>
                                         <th>No. Drugs</th>
                                         <th>Prescription</th>
                                         <th>Actions</th>

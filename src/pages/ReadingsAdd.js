@@ -22,7 +22,7 @@ function Readings(props) {
             props.history.push({
                 pathname: "/patient_details/" + id,
                 state: {
-                    success: "Readings addedd successfully"
+                    success: "Readings added successfully"
                 }
             });
         } else {
@@ -83,7 +83,7 @@ function Readings(props) {
                                     <div className="card-body">
                                         <div className="form-group row">
                                             <div className="col-md-4">
-                                                <label>Blood Sugar <em>*</em></label>
+                                                <label>Blood Sugar(mg/dL)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
@@ -94,7 +94,7 @@ function Readings(props) {
                                                 {errors.blood_sugar && <label className="error">{errors.blood_sugar.message}</label>}
                                             </div>
                                             <div className="col-md-4">
-                                                <label>Blood Pressure <em>*</em></label>
+                                                <label>Blood Pressure(mmHg)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
@@ -105,7 +105,7 @@ function Readings(props) {
                                                 {errors.blood_pressure && <label className="error">{errors.blood_pressure.message}</label>}
                                             </div>
                                             <div className="col-md-4">
-                                                <label>Heart Rate <em>*</em></label>
+                                                <label>Heart Rate(BPM)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
@@ -118,7 +118,7 @@ function Readings(props) {
                                         </div>
                                         <div className="form-group row">
                                             <div className="col-md-4">
-                                                <label>Temperature <em>*</em></label>
+                                                <label>Temperature(C)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
@@ -129,14 +129,14 @@ function Readings(props) {
                                                 {errors.temperature && <label className="error">{errors.temperature.message}</label>}
                                             </div>
                                             <div className="col-md-4">
-                                                <label>Height <em>*</em></label>
+                                                <label>Height(cm)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                 })} className="form-control" name="height" type="text" placeholder="height" />
                                                 {errors.height && <label className="error">{errors.height.message}</label>}
                                             </div>
                                             <div className="col-md-4">
-                                                <label>Weight <em>*</em></label>
+                                                <label>Weight(kg)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                 })} className="form-control" name="weight" type="text" placeholder="weight" />
