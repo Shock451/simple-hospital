@@ -33,7 +33,8 @@ function RadiologyForm(props) {
 
     async function postSubmit(report) {
         setIsLoading(true);
-        const { status, data } = await postRequest(report)
+        const { status, data } = await postRequest(report);
+        console.log(status);
         if (status === 200) {
             props.history.push({
                 pathname: "/",
