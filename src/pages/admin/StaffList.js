@@ -6,6 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 // import Loader from '../components/Loader';
 // import Sidebar from '../components/Sidebar';
 import { fetchAllStaff, deleteStaff } from "../../helpers/api";
+import { capitalize } from '../../helpers/functions';
 
 function StaffList(props) {
 
@@ -60,7 +61,7 @@ function StaffList(props) {
                                             <th scope="row">{index}</th>
                                             {/* <th>{staff.id}</th> */}
                                             <td>{staff.name}</td>
-                                            <td>{staff.role}</td>
+                                            <td>{capitalize(staff.role)}</td>
                                             <td>{staff.email}</td>
                                             <td>{staff.mobile}</td>
                                             <td>

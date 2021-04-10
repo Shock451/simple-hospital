@@ -133,7 +133,7 @@ function Register(props) {
                                         <select ref={register} className="form-control" name="role">
                                             <option value="doctor">Doctor</option>
                                             <option value="patient">Patient</option>
-                                            <option value="radiologist">Radiologist</option>
+                                            <option value="radiographer">Radiographer</option>
                                         </select>
                                     </div> */}
                                     <div className="form-group text-center">

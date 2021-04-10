@@ -57,7 +57,7 @@ function Sidebar(props) {
                         null
                     }
 
-                    {appState?.user.role === 'radiologist' ?
+                    {appState?.user.role === 'radiographer' ?
                         <ul>
                             <li className={props.data.location.pathname === '/radiology' ? 'active' : ''}>
                                 <Link to={'/radiology'}><i className="fa fa-dashboard"></i> <span>All scans</span></Link>

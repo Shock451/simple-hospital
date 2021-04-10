@@ -20,7 +20,7 @@ router.get('/scans', AuthMiddlewares.authorize, AuthMiddlewares.only_patients, P
 
 router.get('/scans/:id', AuthMiddlewares.authorize, AuthMiddlewares.only_patients, PatientController.getScanReport);
 
-router.get("/:search?", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors_or_radiologists, PatientController.getAllPatients);
+router.get("/:search?", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors_or_radiographers, PatientController.getAllPatients);
 
 router.get("/:id/complete", AuthMiddlewares.authorize, AuthMiddlewares.only_doctors, PatientController.getPatientProfile);
 
