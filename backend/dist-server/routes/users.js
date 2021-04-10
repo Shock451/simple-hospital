@@ -10,8 +10,12 @@ router.get('/me', _auth.default.authorize, _users.default.getUserProfile);
 
 router.put('/me', _auth.default.authorize, _users.default.updateUserProfile);
 
+router.get('/list', _auth.default.authorize, _auth.default.only_admins, _users.default.getStaffList);
+
 router.post('/login', _users.default.login);
 
-router.post('/register', _users.default.registerUser, _users.default.login);var _default =
+router.post('/register', _users.default.registerUser, _users.default.login);
+
+router.delete('/', _auth.default.authorize, _auth.default.only_admins, _users.default.deleteStaff);var _default =
 
 router;exports.default = _default;

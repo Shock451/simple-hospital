@@ -58,7 +58,7 @@ function StaffList(props) {
                                 (data && data.length > 0 &&
                                     data.map((staff, index) => (
                                         <tr key={`staff-${staff.id}`}>
-                                            <th scope="row">{index}</th>
+                                            <th scope="row">{index + 1}</th>
                                             {/* <th>{staff.id}</th> */}
                                             <td>{staff.name}</td>
                                             <td>{capitalize(staff.role)}</td>

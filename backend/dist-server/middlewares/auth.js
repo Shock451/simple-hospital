@@ -40,4 +40,12 @@ APP_SECRET = process.env.APP_SECRET;var _default =
     } else {
       next();
     }
+  },
+  only_admins: function only_admins(req, res, next) {
+    var role = req._role;
+    if (role !== _constants.ROLES[3]) {
+      res.status(400).json({ err: "Authorized administrators only." });
+    } else {
+      next();
+    }
   } };exports.default = _default;
