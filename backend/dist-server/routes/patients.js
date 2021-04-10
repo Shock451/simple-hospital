@@ -20,7 +20,7 @@ router.get('/scans', _auth.default.authorize, _auth.default.only_patients, _pati
 
 router.get('/scans/:id', _auth.default.authorize, _auth.default.only_patients, _patients.default.getScanReport);
 
-router.get("/:search?", _auth.default.authorize, _auth.default.only_doctors_or_radiologists, _patients.default.getAllPatients);
+router.get("/:search?", _auth.default.authorize, _auth.default.only_doctors_or_radiographers, _patients.default.getAllPatients);
 
 router.get("/:id/complete", _auth.default.authorize, _auth.default.only_doctors, _patients.default.getPatientProfile);
 

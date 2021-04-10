@@ -1,7 +1,7 @@
 import { doQueryParams } from "../setup/db.js";
 
 export const getStaffList = async () => {
-    let query = "SELECT * FROM users WHERE role = 'doctor' or role = 'radiologist'";
+    let query = "SELECT * FROM users WHERE role = 'doctor' or role = 'radiographer'";
     return doQueryParams(query);
 }
 

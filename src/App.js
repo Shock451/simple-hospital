@@ -70,7 +70,7 @@ function App(props) {
                     <PrivateRoute exact path="/" component={Home} />
                     <PrivateRoute path="/profile" component={Profile} />
                     
-                    <PrivateRoute role="radiologist" path="/radiology" component={RadiologyForm} />
+                    <PrivateRoute role="radiographer" path="/radiology" component={RadiologyForm} />
                     
                     <PrivateRoute role="doctor" path="/patient_list" component={PatientList} />
                     

@@ -102,14 +102,11 @@ function CreateStaff(props) {
                                     <label>Staff Role</label>
                                     <select ref={register} className="form-control" name="role">
                                         <option value="doctor">Doctor</option>
-                                        <option value="radiologist">Radiologist</option>
+                                        <option value="radiographer">Radiographer</option>
                                     </select>
                                 </div>
                                 <div className="form-group text-center mt-5">
-                                    <button className="btn btn-primary account-btn" type="submit" >Register</button>
-                                </div>
-                                <div className="account-footer mb-3">
-                                    <p>Already have an account? <Link to={'/login'}>Login</Link></p>
+                                    <button className="btn btn-primary account-btn" type="submit" >Create account</button>
                                 </div>
                             </form>
                         </div>

@@ -33,10 +33,10 @@ APP_SECRET = process.env.APP_SECRET;var _default =
       next();
     }
   },
-  only_doctors_or_radiologists: function only_doctors_or_radiologists(req, res, next) {
+  only_doctors_or_radiographers: function only_doctors_or_radiographers(req, res, next) {
     var role = req._role;
     if (role === _constants.ROLES[0]) {// ROLES[0] is doctorr
-      res.status(400).json({ err: "Authorized doctors or radiologists only." });
+      res.status(400).json({ err: "Authorized doctors or radiographers only." });
     } else {
       next();
     }
