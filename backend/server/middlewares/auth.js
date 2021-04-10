@@ -40,5 +40,13 @@ export default {
         } else {
             next();
         }
+    },
+    only_admins: (req, res, next) => {
+        let role = req._role;
+        if (role !== ROLES[3]){
+            res.status(400).json({err: "Authorized administrators only."});
+        } else {
+            next();
+        }
     }
 }

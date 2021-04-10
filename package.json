@@ -16,6 +16,7 @@
     "react-confirm-alert": "^2.6.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.2.0",
+    "react-loading-skeleton": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-scheduler-calendar": "^0.4.15-0",
     "react-scripts": "^4.0.1",

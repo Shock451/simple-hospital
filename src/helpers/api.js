@@ -1,5 +1,44 @@
 import { BASE_URL } from './constants';
 
+export const fetchAllStaff = async () => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/users/list', {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+            'Accept': 'application/json',
+        }
+    });
+    const status = res.status;
+    const data = await res.json();
+    return { status, data };
+}
+
+
+export const deleteStaff = async (id, role) => {
+    const token = localStorage.getItem('token');
+    const res = await fetch(BASE_URL + '/users', {
+        method: "DELETE",
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': "application/json",
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            id: id,
+            role: role,
+        }),
+    });
+    const status = res.status;
+    // const data = await res.json();
+    return {
+        status,
+        // data ,
+    };
+}
+
+
 export const fetchUserDetails = async () => {
     const token = localStorage.getItem('token');
     const res = await fetch(BASE_URL + '/users/me', {

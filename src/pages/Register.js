@@ -30,7 +30,7 @@ function Register(props) {
                 mobile: data.mobile,
                 email: data.username,
                 password: data.password,
-                role: data.role,
+                role: "patient",
             })
         }).then((res) => {
             status = res.status;
@@ -128,14 +128,14 @@ function Register(props) {
                                         <input ref={register({ required: "This field is required" })} className="form-control" name="password" type="password" placeholder="password" />
                                         {errors.password && <label className="error">{errors.password.message}</label>}
                                     </div>
-                                    <div className="form-group">
+                                    {/* <div className="form-group">
                                         <label>You are ?</label>
                                         <select ref={register} className="form-control" name="role">
                                             <option value="doctor">Doctor</option>
                                             <option value="patient">Patient</option>
                                             <option value="radiologist">Radiologist</option>
                                         </select>
-                                    </div>
+                                    </div> */}
                                     <div className="form-group text-center">
                                         <button className="btn btn-primary account-btn" type="submit" >Register</button>
                                     </div>

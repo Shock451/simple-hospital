@@ -11,7 +11,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     if (typeof role === 'undefined') {
         role = null;
     }
-    console.log(role)
+    
     if (role && rest.role && role !== rest.role) {
         return <Redirect to="/" />;
     }

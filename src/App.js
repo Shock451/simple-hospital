@@ -23,6 +23,9 @@ import Appointments from './pages/Appointments';
 import ScanReports from './pages/ScanReports';
 import RadiologyForm from './pages/RadiologyForm';
 
+import StaffList from './pages/admin/StaffList';
+import CreateStaff from './pages/admin/CreateStaff';
+
 import { AppContext } from "./Context";
 import Loader from './components/Loader';
 // import MedsRefillRequest from "./pages/MedsRefillRequest";
@@ -75,6 +78,9 @@ function App(props) {
                     
                     <PrivateRoute role="doctor" path="/doctor_message/:id" component={DoctorMessage} />
                     <PrivateRoute role="doctor" path="/doctor_message_list" component={DoctorMessageList} />
+
+                    <PrivateRoute role="admin" path="/admin/create" component={CreateStaff} />
+                    <PrivateRoute role="admin" path="/admin" component={StaffList} />
                     
                     <PrivateRoute role="patient" path="/readings" component={Readings} />
                     <PrivateRoute role="doctor" path="/readings_add/:id" component={ReadingsAdd} />

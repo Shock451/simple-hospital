@@ -36,6 +36,8 @@ function Home(props) {
             return <Redirect to={'/patient_list'} />;
         } else if (appState.user.role === 'radiologist') {
             return <Redirect to={'/radiology'} />;
+        } else if (appState.user.role === 'admin') {
+            return <Redirect to={'/admin'} />;
         }
 
     }

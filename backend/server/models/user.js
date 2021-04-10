@@ -1,6 +1,19 @@
 import { doQueryParams } from "../setup/db.js";
 
+export const getStaffList = async () => {
+    let query = "SELECT * FROM users WHERE role = 'doctor' or role = 'radiologist'";
+    return doQueryParams(query);
+}
 
+export const deleteUser = async (id) => {
+    let query = `DELETE FROM users WHERE id = ?`;
+    return doQueryParams(query, [id]);
+}
+
+export const deleteProfile = async (id, role) => {
+    let query = ` DELETE FROM ${role}s WHERE user_id = ?`;
+    return doQueryParams(query, [id]);
+}
 
 export const getProfile = async (id, role) => {
     // let roleSpecificFields = role === ROLES[0] ? 'dob, alergies'  : 'license_num';
