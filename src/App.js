@@ -40,7 +40,6 @@ function App(props) {
             setLoading(false);
         }
         if (authToken) {
-            console.log("We are in App and fetching");
             fetchData();
         }
     }, [authToken]);
@@ -72,7 +71,8 @@ function App(props) {
                 <Route path="/register" component={Register} />
                 <Route path="/forgotpassword" component={ForgotPassword} />
             </Router>
-        </AppContext.Provider>);
+        </AppContext.Provider>
+    );
 }
 
 export default App;
