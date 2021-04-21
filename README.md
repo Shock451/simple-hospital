@@ -1,4 +1,4 @@
-### Health Monitoring System - Patient-Doctor Live Chat
+### Health Monitoring System
 
 ###### Health Monitoring System is a simple web project where patients can add their readings and doctors can check patient's readings and can send direct messages to each other through the application. Both patients and doctors need to log in or register before proceeds. Both patient and doctors can live chat with each other.
 
@@ -24,7 +24,7 @@
 
 
 ***Languages & tools:***
-1. React Js,
+1. React Js & Context API,
 2. HTML,
 3. CSS,
 4. Javascript,
