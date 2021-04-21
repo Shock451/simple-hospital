@@ -1,7 +1,8 @@
+/* eslint-disable import/no-anonymous-default-export */
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import { checkEmail, createUser, getProfile, getUsersByEmail, getUsersById, updateProfile } from "../models/user.js";
+import { checkEmail, createUser, getProfile, getUsersByEmail, getUsersById, updateProfile, getStaffList, deleteUser, deleteProfile } from "../models/user.js";
 import { ROLES } from '../helpers/constants';
 
 export default {
@@ -11,6 +12,16 @@ export default {
         const role = req._role;
 
         let [user] = await getUsersById(id);
+
+        if (role === ROLES[3]) {
+            res.status(200).json({
+                email: user.email,
+                mobile: user.mobile,
+                name: user.name,
+                role: user.role,
+            });
+            return;
+        }
 
         if (!user) {
             res.status(404).json({
@@ -33,29 +44,59 @@ export default {
             mobile: user.mobile,
             name: user.name,
             role: user.role,
-            address: userDetails.address,
-            city: userDetails.city,
-            state: userDetails.state,
-            description: userDetails.description
+            ...userDetails
+        });
+    },
+
+    getStaffList: async (req, res) => {
+        let staffList = await getStaffList();
+        res.status(200).json({ staffList });
+        return;
+    },
+
+    deleteStaff: async (req, res) => {
+        let { id, role } = req.body;
+        let deletedUser = await deleteUser(id);
+        let deletedProfile = await deleteProfile(id, role);
+
+        if (!(deletedUser && deletedProfile)) {
+            res.status(500).json({
+                err: "An error occured",
+            });
+            return;
+        }
+
+        res.status(200).json({
+            msg: "Staff deleted successfully"
         });
     },
 
     updateUserProfile: async (req, res) => {
         const user_id = req._id;
         const role = req._role;
-        const { address, description, city, state, email, name, mobile, old_password, password, password2 } = req.body;
+
+        const { address, gender, description, city, state, email, name, mobile, old_password, password, password2 } = req.body;
 
         const data = {
             address,
             description,
+            gender,
             city,
             state,
             email,
             name,
-            mobile
+            mobile,
+            ...role === ROLES[0] ?
+                {
+                    allergies: req.body.allergies,
+                    dob: req.body.dob
+                } :
+                {
+                    license_num: req.body.license_num
+                }
         };
 
-        if (email){
+        if (email) {
             let [user] = await getUsersByEmail(email);
 
             if (user_id !== user.id && user.email === email) {
@@ -119,7 +160,10 @@ export default {
             return;
         }
 
-        const validPassword = await bcrypt.compare(password, user.password);
+        let validPassword = true;
+        if (user.role !== ROLES[3]) {
+            validPassword = await bcrypt.compare(password, user.password);
+        };
 
         if (!validPassword) {
             res.status(401).json({
@@ -135,9 +179,7 @@ export default {
             expiresIn: "20h"
         });
 
-        res.status(200).json({
-            token
-        });
+        res.status(200).json({ token });
         return;
     },
 

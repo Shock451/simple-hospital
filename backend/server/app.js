@@ -1,9 +1,9 @@
+import path from 'path';
 import "dotenv/config";
 import "regenerator-runtime/runtime.js";
 import express, { json, urlencoded } from "express";
-import bodyParser from 'body-parser';
+// import bodyParser from 'body-parser';
 import cors from "cors";
-import multer from "multer";
 
 import indexRouter from "./routes/index";
 
@@ -11,12 +11,7 @@ const { PORT } = process.env;
 
 const app = express()
 
-const multerMid = multer({
-    storage: multer.memoryStorage(),
-    limits: {
-        fileSize: 5 * 1024 * 1024,
-    },
-});
+app.use('/static', express.static(path.join(__dirname, 'public')))
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -24,11 +19,9 @@ app.use(function (req, res, next) {
     next();
 })
 
+
 // make the application use cors
 app.use(cors());
-// use multer for single file uploads
-app.use(multerMid.single('file'));
-
 // use bodyparser to parse json body
 app.use(json());
 

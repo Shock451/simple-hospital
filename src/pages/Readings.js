@@ -5,7 +5,14 @@ import Header from '../components/Header';
 import Loader from '../components/Loader';
 import Sidebar from '../components/Sidebar';
 import {BASE_URL} from '../helpers/constants';
-import { convertDate } from '../helpers/functions';
+import { convertDate, calculateBMI } from '../helpers/functions';
+
+function getClassName(val, max, min){
+    return val < min? "low" : val > max ? "high" : "normal";
+    // if (val < min){
+    //     return "yellow";
+    // } else if (val )
+}
 
 function Readings(props) {
     const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +52,7 @@ function Readings(props) {
                     props.history.push({
                         pathname: "/readings",
                         state: {
-                            success: "Readings deleted successfully"
+                            success: "Reading deleted successfully"
                         }
                     });
                     fetchData();
@@ -84,9 +91,6 @@ function Readings(props) {
                                     <li className="breadcrumb-item active">Readings</li>
                                 </ul>
                             </div>
-                            <div className="col-auto float-right ml-auto">
-                                <Link to={'/readings_add'} className="btn add-btn"><i className="fa fa-plus"></i> Add New Readings</Link>
-                            </div>
                         </div>
                     </div>
                     {
@@ -121,11 +125,13 @@ function Readings(props) {
                                     <tr>
                                         <th>#</th>
                                         <th>Date</th>
-                                        <th>Blood Sugar</th>
-                                        <th>Blood Pressure</th>
-                                        <th>Heart Rate</th>
-                                        <th>Temperature</th>
-                                        <th>Actions</th>
+                                        <th>Blood Sugar(mg/dL)</th>
+                                        <th>Blood Pressure(mmHg)</th>
+                                        <th>Heart Rate(BPM)</th>
+                                        <th>Temperature(C)</th>
+                                        <th>BMI(kg/m2)</th>
+                                        <th>No. Drugs</th>
+                                        <th>Prescription</th>
                                     </tr>
                                 </thead>
                                 {
@@ -139,38 +145,13 @@ function Readings(props) {
                                                         <tr key={data.id}>
                                                             <td>{index + 1}</td>
                                                             <td>{convertDate(data.updated)}</td>
-                                                            <td>{data.blood_sugar}</td>
-                                                            <td>{data.blood_pressure}</td>
-                                                            <td>{data.heart_rate}</td>
-                                                            <td>{data.temperature}</td>
-                                                            <td className="text-right">
-                                                                <div className="dropdown dropdown-action">
-                                                                    <button
-                                                                        className="action-icon dropdown-toggle"
-                                                                        data-toggle="dropdown"
-                                                                        aria-expanded="false">
-                                                                        <i className="material-icons">more_vert</i>
-                                                                    </button>
-                                                                    <div className="btn dropdown-menu dropdown-menu-right" x-placement="bottom-end">
-                                                                        <Link
-                                                                            className="dropdown-item border-0 btn-transition btn passData"
-                                                                            to={'/readings_edit/' + data.id}
-                                                                            title="Edit">
-                                                                            <i className="fa fa-pencil"></i> Edit
-                                                                        </Link>
-                                                                        <button
-                                                                            className="btn dropdown-item border-0 btn-transition btn passData"
-                                                                            title="Delete"
-                                                                            onClick={() => {
-                                                                                if (window.confirm('Are you sure you want to delete this?')) {
-                                                                                    deletePatient(data.id)
-                                                                                };
-                                                                            }}>
-                                                                            <i className="fa fa-trash"></i> Delete
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
+                                                            <td className={getClassName(data.blood_sugar, 140, 130)}>{data.blood_sugar}</td>
+                                                            <td className={getClassName(data.blood_pressure, 120, 110)}>{data.blood_pressure}</td>
+                                                            <td className={getClassName(data.heart_rate, 100, 60)}>{data.heart_rate}</td>
+                                                            <td className={getClassName(data.temperature, 38, 36)}>{data.temperature}</td>
+                                                            <td className={getClassName(calculateBMI(data.height, data.weight), 25, 18)}>{calculateBMI(data.height, data.weight)}</td>
+                                                            <td>{data.prescribed}</td>
+                                                            <td>{data.prescription}</td>
                                                         </tr>
                                                     )
                                                 })

@@ -1,6 +1,6 @@
 {
-  "name": "health-monitoring",
-  "version": "0.1.0",
+  "name": "doctor-patient-portal",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -16,8 +16,11 @@
     "react-confirm-alert": "^2.6.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.2.0",
+    "react-loading-skeleton": "^2.2.0",
     "react-router-dom": "^5.2.0",
+    "react-scheduler-calendar": "^0.4.15-0",
     "react-scripts": "^4.0.1",
+    "react-web-notification": "^0.8.0",
     "reactstrap": "^8.5.1"
   },
   "scripts": {

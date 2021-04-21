@@ -6,6 +6,9 @@ import {
     getPatient,
     getPatientProfile,
 
+    getPatientScanReport,
+    getPatientScanReports,
+
     getReadingsByPatient,
     getReadingByPatient,
     addReadingsById,
@@ -84,12 +87,47 @@ export default {
         res.status(200).json(patient);
     },
 
-    getReadingByPatientId: async (req, res) => {
+    getScanReports: async (req, res) => {
+        const id = req._id;
+        let reports = await getPatientScanReports(id);
+
+        if (!reports) {
+            res.status(404).json({
+                err: "No reports found",
+            });
+            return;
+        }
+
+        reports = reports.map(report => {
+            report['image_uri'] = `${req.protocol}://${req.get('host')}/static/scans/${report['image_uri']}`
+            return report;
+        })
+
+        res.status(200).json(reports);
+    },
+
+    getScanReport: async (req, res) => {
         const patient_id = req._id;
+        const report_id = req.params.id;
+        let [report] = await getPatientScanReport(report_id, patient_id);
+
+        if (!report) {
+            res.status(404).json({
+                err: "Report not found",
+            });
+            return;
+        }
+
+        report['image_uri'] = `${req.protocol}://${req.get('host')}/static/scans/${report['image_uri']}`;
+
+        res.status(200).json(report);
+    },
+
+    getReadingByPatientId: async (req, res) => {
 
         const id = req.params.id;
 
-        let [record] = await getReadingByPatient(id, patient_id);
+        let [record] = await getReadingByPatient(id);
 
         if (!record) {
             res.status(404).json({
@@ -102,16 +140,21 @@ export default {
     },
 
     postReadingsByPatientId: async (req, res) => {
-        const user_id = req._id;
-        const { blood_pressure, blood_sugar, heart_rate, temperature } = req.body;
+        const user_id = req.params.id;
+        // const { blood_pressure, blood_sugar, heart_rate, temperature } = req.body;
 
-        let added = await addReadingsById({
-            patient_id: user_id,
-            blood_pressure,
-            blood_sugar,
-            heart_rate,
-            temperature
-        });
+        // let added = await addReadingsById({
+        //     patient_id: user_id,
+        //     blood_pressure,
+        //     blood_sugar,
+        //     heart_rate,
+        //     temperature,
+        //     height,
+        //     weight,
+        //     prescribed
+        // });
+
+        let added = await addReadingsById({ ...req.body, patient_id: user_id });
 
         if (!added) {
             res.status(500).json({
@@ -126,15 +169,18 @@ export default {
     },
 
     updateReadingByPatientId: async (req, res) => {
-        const user_id = req._id;
         const id = req.params.id;
-        const { blood_pressure, blood_sugar, heart_rate, temperature } = req.body;
+        const { blood_pressure, blood_sugar, heart_rate, temperature, height, weight, prescribed, prescription } = req.body;
 
-        let updated = await updateReadingsById(id, user_id, {
+        let updated = await updateReadingsById(id, {
             blood_pressure,
             blood_sugar,
             heart_rate,
-            temperature
+            temperature,
+            height,
+            weight,
+            prescribed,
+            prescription
         });
 
         if (!updated) {
@@ -150,10 +196,9 @@ export default {
     },
 
     deleteReadingsByPatientId: async (req, res) => {
-        const user_id = req._id;
         const reading_id = req.params.id;
 
-        let deleted = await deleteReadingsById(user_id, reading_id);
+        let deleted = await deleteReadingsById(reading_id);
 
         if (!deleted) {
             res.status(500).json({

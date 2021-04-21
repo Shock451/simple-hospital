@@ -11,16 +11,18 @@ function Readings(props) {
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
 
+    const id = props.match.params.id;
+
     const { register, handleSubmit, errors } = useForm();
 
     async function postSubmit(reading) {
         setIsLoading(true);
-        const { status, data } = await postPatientReadings(reading)
+        const { status, data } = await postPatientReadings(id, reading)
         if (status) {
             props.history.push({
-                pathname: "/readings",
+                pathname: "/patient_details/" + id,
                 state: {
-                    success: "Readings addedd successfully"
+                    success: "Readings added successfully"
                 }
             });
         } else {
@@ -55,7 +57,7 @@ function Readings(props) {
                                 </ul>
                             </div>
                             <div className="col-auto float-right ml-auto">
-                                <Link to={'/readings'} className="btn add-btn"><i className="fa fa-arrow-left"></i> Back to Readings</Link>
+                                <Link to={'/patient_details/' + id} className="btn add-btn"><i className="fa fa-arrow-left"></i> Back to Readings</Link>
                             </div>
                         </div>
                     </div>
@@ -81,7 +83,7 @@ function Readings(props) {
                                     <div className="card-body">
                                         <div className="form-group row">
                                             <div className="col-md-4">
-                                                <label>Blood Sugar <em>*</em></label>
+                                                <label>Blood Sugar(mg/dL)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
@@ -92,7 +94,7 @@ function Readings(props) {
                                                 {errors.blood_sugar && <label className="error">{errors.blood_sugar.message}</label>}
                                             </div>
                                             <div className="col-md-4">
-                                                <label>Blood Pressure <em>*</em></label>
+                                                <label>Blood Pressure(mmHg)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
@@ -103,7 +105,7 @@ function Readings(props) {
                                                 {errors.blood_pressure && <label className="error">{errors.blood_pressure.message}</label>}
                                             </div>
                                             <div className="col-md-4">
-                                                <label>Heart Rate <em>*</em></label>
+                                                <label>Heart Rate(BPM)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
@@ -116,7 +118,7 @@ function Readings(props) {
                                         </div>
                                         <div className="form-group row">
                                             <div className="col-md-4">
-                                                <label>temperature <em>*</em></label>
+                                                <label>Temperature(C)<em>*</em></label>
                                                 <input ref={register({
                                                     required: "This field is required",
                                                     pattern: {
@@ -125,6 +127,40 @@ function Readings(props) {
                                                     },
                                                 })} className="form-control" name="temperature" type="text" placeholder="temperature" />
                                                 {errors.temperature && <label className="error">{errors.temperature.message}</label>}
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label>Height(cm)<em>*</em></label>
+                                                <input ref={register({
+                                                    required: "This field is required",
+                                                })} className="form-control" name="height" type="text" placeholder="height" />
+                                                {errors.height && <label className="error">{errors.height.message}</label>}
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label>Weight(kg)<em>*</em></label>
+                                                <input ref={register({
+                                                    required: "This field is required",
+                                                })} className="form-control" name="weight" type="text" placeholder="weight" />
+                                                {errors.weight && <label className="error">{errors.weight.message}</label>}
+                                            </div>
+                                        </div>
+                                        <div className="form-group row">
+                                            <div className="col-md-8">
+                                                <label>Prescription <em>*</em></label>
+                                                <textarea ref={register({
+                                                    required: "This field is required",
+                                                })} className="form-control" name="prescription" type="text" placeholder="How many drugs are you prescribing?"> </textarea>
+                                                {errors.prescription && <label className="error">{errors.prescription.message}</label>}
+                                            </div>
+                                            <div className="col-md-4">
+                                                <label>No. Drugs prescribed</label>
+                                                <input ref={register({
+                                                    required: "This field is required",
+                                                    pattern: {
+                                                        value: /^[0-9]*$/i,
+                                                        message: "Please enter valid number"
+                                                    },
+                                                })} className="form-control" name="prescribed" type="text" placeholder="0" />
+                                                {errors.prescribed && <label className="error">{errors.prescribed.message}</label>}
                                             </div>
                                         </div>
                                         <div className="form-actions text-right">
