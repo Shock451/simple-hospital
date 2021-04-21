@@ -1,6 +1,6 @@
 ### Health Monitoring System
 
-###### Health Monitoring System is a simple web project where patients can add their readings and doctors can check patient's readings and can send direct messages to each other through the application. Both patients and doctors need to log in or register before proceeds. Both patient and doctors can live chat with each other.
+###### Health Monitoring System is a simple web project where patients can add their readings and doctors can check patient's readings and can send direct messages to each other through the application. Appointments can be scheduled and radiographers can upload patient scan reports. Patients need to log in or register. Both patient and doctors can live chat with each other.
 
 ----------
 
@@ -15,15 +15,21 @@
 - Live Chat with doctors.
 
 **Doctor:**
-- Login, Register, Forget Password.
+- Login.
 - List of patients.
 - Live search of patients.
 - Chart view details about patients.
 - Direct message to patients.
 - Live Chat with Patients.
 
+**Radiographer:**
+- Login.
+- Upload scan report.
+
+----------
 
 ***Languages & tools:***
+----------
 1. React Js & Context API,
 2. HTML,
 3. CSS,
